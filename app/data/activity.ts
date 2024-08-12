@@ -351,3 +351,55 @@ export const getAvailableReviewActivities = async ({
     throw new Error('리뷰를 가져오는 중에 에러가 발생하였습니다.');
   }
 };
+
+export const getActivitiesByLocation = async ({
+  location,
+  size = 5,
+  cursor,
+}: {
+  location: string;
+  size?: number;
+  cursor?: string;
+}): Promise<{ activities: ActivityWithUserAndFavoCount[]; cursorId: string | null }> => {
+  try {
+    const baseQuery = {
+      take: size,
+      cursor: cursor ? { id: cursor } : undefined,
+      skip: cursor ? 1 : 0,
+      include: {
+        user: {
+          select: {
+            id: true,
+            nickname: true,
+            email: true,
+            image: true,
+            tags: true,
+            createdAt: true,
+          },
+        },
+        _count: {
+          select: {
+            favorites: true,
+          },
+        },
+      },
+    };
+
+    const activities = await db.activity.findMany({
+      ...baseQuery,
+      where: { location },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    const cursorId = activities.length > 0 ? activities[activities.length - 1].id : null;
+
+    return {
+      activities,
+      cursorId,
+    };
+  } catch (error) {
+    throw new Error('활동을 가져오는 중에 에러가 발생하였습니다.');
+  }
+};
