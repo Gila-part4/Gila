@@ -77,7 +77,7 @@ export default function ActivityList({ activities, cursorId, sort }: Props) {
         {infinityActivities.map((activity, index) => (
           <li key={activity.id}>
             <ActivityListCard activity={activity} />
-            {index === 4 && userLocation && <ActivityCarousel userLocation={userLocation} />}
+            {index === 4 && <ActivityCarousel userLocation={userLocation} />}
           </li>
         ))}
         <div ref={observer} />

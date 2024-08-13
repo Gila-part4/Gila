@@ -5,6 +5,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getActivitiesByLocation } from '@/app/data/activity';
 import { ActivityWithUserAndFavoCount } from '@/type';
+import ActivityCardSkeleton from '@/components/skeletons/activity-card-skeleton';
 import ActivityListCard from './activity-list-card';
 
 export default function ActivityCarousel({ userLocation }: { userLocation: string }) {
@@ -57,20 +58,37 @@ export default function ActivityCarousel({ userLocation }: { userLocation: strin
   }, [userLocation]);
 
   return (
-    <div className="bg-gray_200 p-5 flex flex-col gap-5 mt-6 rounded-lg">
-      <p className="text-xl font-semibold">
-        <span className="text-xl text-primary">{userLocation}</span>
-        에서 같이 해요!
-      </p>
-      <div className="overflow-x-scroll">
-        <ul className="flex gap-4  w-fit">
-          {recommendList.map((item) => (
-            <li key={item.id} className="w-[300px]">
-              <ActivityListCard activity={item} />
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className="bg-gray_200 py-5 flex flex-col gap-5 mt-6 rounded-lg">
+      {userLocation ? (
+        <>
+          <p className="text-xl font-semibold px-5">
+            <span className="text-xl text-primary">{userLocation}</span>
+            에서 같이 해요!
+          </p>
+          <div className="overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+            <ul className="flex gap-4  w-fit">
+              {recommendList.map((item, index) => (
+                <li
+                  key={item.id}
+                  className={`w-[280px] ${index === 0 && 'ml-5'} ${recommendList.length - 1 === index && 'mr-5'}`}
+                >
+                  <ActivityListCard activity={item} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
+      ) : (
+        <>
+          <div>
+            <p className="text-lg font-semibold">위치 권한을 허용해주세요!</p>
+            <p className="text-sm">접속하신 지역을 기준으로 길라를 추천해드릴께요!</p>
+          </div>
+          <div>
+            <ActivityCardSkeleton />
+          </div>
+        </>
+      )}
     </div>
   );
 }
