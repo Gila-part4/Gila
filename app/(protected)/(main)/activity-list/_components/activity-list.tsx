@@ -21,6 +21,7 @@ export default function ActivityList({ activities, cursorId, sort }: Props) {
   const [infinityCursorId, setInfinityCursorId] = useState<string | null>(cursorId);
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const [userLocation, setUserLocation] = useState('');
 
   const loadMoreActivities = useCallback(async () => {
     startTransition(async () => {
@@ -44,6 +45,10 @@ export default function ActivityList({ activities, cursorId, sort }: Props) {
   useEffect(() => {
     setInfinityActivities([...activities]);
     setInfinityCursorId(cursorId);
+    const location = localStorage.getItem('location');
+    if (location) {
+      setUserLocation(location);
+    }
   }, [activities, cursorId, sort]);
 
   if (activities.length === 0 && searchParams.get('sort') === 'tag') {
@@ -72,7 +77,7 @@ export default function ActivityList({ activities, cursorId, sort }: Props) {
         {infinityActivities.map((activity, index) => (
           <li key={activity.id}>
             <ActivityListCard activity={activity} />
-            {index === 4 && <ActivityCarousel />}
+            {index === 4 && userLocation && <ActivityCarousel userLocation={userLocation} />}
           </li>
         ))}
         <div ref={observer} />

@@ -7,9 +7,8 @@ import { getActivitiesByLocation } from '@/app/data/activity';
 import { ActivityWithUserAndFavoCount } from '@/type';
 import ActivityListCard from './activity-list-card';
 
-export default function ActivityCarousel() {
+export default function ActivityCarousel({ userLocation }: { userLocation: string }) {
   const [recommendList, setRecommentList] = useState<ActivityWithUserAndFavoCount[]>([]);
-  const userLocation = localStorage.getItem('location');
 
   const getAddress = (mapResult: any, mapStatus: any) => {
     if (mapStatus === window.kakao.maps.services.Status.OK) {
