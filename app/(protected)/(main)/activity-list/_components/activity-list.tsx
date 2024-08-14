@@ -21,7 +21,7 @@ export default function ActivityList({ activities, cursorId, sort }: Props) {
   const [infinityCursorId, setInfinityCursorId] = useState<string | null>(cursorId);
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
-  const [userLocation, setUserLocation] = useState('');
+  const [userLocation, setUserLocation] = useState([]);
 
   const loadMoreActivities = useCallback(async () => {
     startTransition(async () => {
@@ -47,7 +47,8 @@ export default function ActivityList({ activities, cursorId, sort }: Props) {
     setInfinityCursorId(cursorId);
     const location = localStorage.getItem('location');
     if (location) {
-      setUserLocation(location);
+      const stringifyLocation = JSON.parse(location);
+      setUserLocation(stringifyLocation);
     }
   }, [activities, cursorId, sort]);
 
