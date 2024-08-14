@@ -40,7 +40,7 @@ export default function QuestionLocationPopover({
   ); // 세부 행정구역 결정
 
   const subLocations = useMemo(() => {
-    return location ? LOCATIONS[location] : [];
+    return location ? LOCATIONS[location].list : [];
   }, [location]);
 
   return (
@@ -74,12 +74,12 @@ export default function QuestionLocationPopover({
                 <ul className="grid grid-cols-3 gap-3 mt-1">
                   {subLocations.map((city) => (
                     <CommandItem
-                      key={city}
-                      value={city}
+                      key={city.state}
+                      value={city.state}
                       onSelect={handleSelectSubLocation}
                       className="flex items-center justify-center w-full border rounded-lg hover:bg-gray-100"
                     >
-                      {city}
+                      {city.state}
                     </CommandItem>
                   ))}
                 </ul>
