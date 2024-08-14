@@ -354,18 +354,17 @@ export const getAvailableReviewActivities = async ({
 
 export const getActivitiesByLocation = async ({
   location,
+  secondeLocation,
   size = 5,
-  cursor,
 }: {
   location: string;
+  secondeLocation?: string;
   size?: number;
-  cursor?: string;
-}): Promise<{ activities: ActivityWithUserAndFavoCount[]; cursorId: string | null }> => {
+}): Promise<{ activities: ActivityWithUserAndFavoCount[] }> => {
   try {
+    let activities: ActivityWithUserAndFavoCount[];
     const baseQuery = {
       take: size,
-      cursor: cursor ? { id: cursor } : undefined,
-      skip: cursor ? 1 : 0,
       include: {
         user: {
           select: {
@@ -385,7 +384,7 @@ export const getActivitiesByLocation = async ({
       },
     };
 
-    const activities = await db.activity.findMany({
+    const firstactivities = await db.activity.findMany({
       ...baseQuery,
       where: { location },
       orderBy: {
@@ -393,11 +392,21 @@ export const getActivitiesByLocation = async ({
       },
     });
 
-    const cursorId = activities.length > 0 ? activities[activities.length - 1].id : null;
+    activities = [...firstactivities];
+
+    if (secondeLocation) {
+      const secondeActivities = await db.activity.findMany({
+        ...baseQuery,
+        where: { location: secondeLocation },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+      activities = [...activities, ...secondeActivities];
+    }
 
     return {
       activities,
-      cursorId,
     };
   } catch (error) {
     throw new Error('활동을 가져오는 중에 에러가 발생하였습니다.');
