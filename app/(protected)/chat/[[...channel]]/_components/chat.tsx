@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useChannel } from 'ably/react';
+import { useChannel, usePresence, usePresenceListener } from 'ably/react';
 import { useReducer, useEffect, useRef } from 'react';
 import { User } from '@/type';
 import MessageInput from './message-input';
@@ -28,6 +28,8 @@ export default function Chat({ channelName, user }: Props) {
   const [messages, dispatch] = useReducer(reducer, []);
   const { channel, publish } = useChannel(channelName, dispatch);
   const scrollRef = useRef<HTMLDivElement>(null);
+  usePresence(channelName, { fullName: user.nickname });
+  const { presenceData } = usePresenceListener(channelName);
 
   const publishMessage = (text: string) => {
     publish({
