@@ -4,6 +4,26 @@ import QuestionList from '@/app/(protected)/(main)/question-list/_components/que
 import SortingDropdown from '@/components/sorting-dropdown';
 import { QUESTIONSORTS } from '@/constants/sort';
 import { QuestionSort } from '@/type';
+import { unstable_cache } from 'next/cache';
+
+const getQuestionWithCache = unstable_cache(
+  async ({
+    take,
+    order,
+    answerTake,
+    location,
+  }: {
+    take: number;
+    order: QuestionSort;
+    answerTake: number;
+    location?: string;
+  }) => {
+    const result = await getQuestions({ take, order, answerTake, location });
+    return result;
+  },
+  ['questionList'],
+  { revalidate: 3600, tags: ['questionList'] },
+);
 
 export default async function Page({
   searchParams,
@@ -11,7 +31,7 @@ export default async function Page({
   searchParams: { sort: QuestionSort; location: string };
 }) {
   const { sort, location } = searchParams;
-  const qusetions = await getQuestions({
+  const qusetions = await getQuestionWithCache({
     take: 7,
     order: sort,
     answerTake: 5,

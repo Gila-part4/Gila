@@ -4,13 +4,40 @@ import MainCarousel from '@/app/(protected)/(main)/_components/main-carousel';
 import ActivityContainer from '@/app/(protected)/(main)/activity-list/_components/activity-container';
 import Link from 'next/link';
 import PlusDiv from '@/components/common/plus-div';
+import { unstable_cache } from 'next/cache';
+import { getCurrentUser } from '@/app/data/user';
+
+const getActivityWithCache = unstable_cache(
+  async ({
+    type,
+    location,
+    size,
+    tags,
+  }: {
+    type: Sort;
+    location?: string;
+    size: number;
+    tags: string[];
+  }) => {
+    const result = await getActivities({ type, location, size, tags });
+    return result;
+  },
+  ['activityList'],
+  { revalidate: 3600, tags: ['activityList'] },
+);
 
 export default async function Page({
   searchParams: { sort, location },
 }: {
   searchParams: { sort: Sort; location: string };
 }) {
-  const { activities, cursorId } = await getActivities({ type: sort, location, size: 5 });
+  const currentUser = await getCurrentUser();
+  const { activities, cursorId } = await getActivityWithCache({
+    type: sort,
+    location,
+    size: 5,
+    tags: currentUser.tags,
+  });
 
   return (
     <main className="relative">

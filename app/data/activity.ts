@@ -1,6 +1,6 @@
 'use server';
 
-import { getCurrentUser, getCurrentUserId } from '@/app/data/user';
+import { getCurrentUserId } from '@/app/data/user';
 import db from '@/lib/db';
 import {
   ActivityWithUser,
@@ -63,14 +63,15 @@ export const getActivities = async ({
   location,
   size = 5,
   cursor,
+  tags,
 }: {
   type: 'recent' | 'mostFavorite' | 'tag' | 'mostViewed';
   location?: string;
   size?: number;
   cursor?: string;
+  tags?: string[];
 }): Promise<{ activities: ActivityWithUserAndFavoCount[]; cursorId: string | null }> => {
   try {
-    const currentUser = await getCurrentUser();
     let activities;
 
     const baseQuery = {
@@ -125,22 +126,18 @@ export const getActivities = async ({
         break;
 
       case 'tag':
-        if (!currentUser || !currentUser.tags) {
-          throw new Error('현재 유저가 존재하지 않습니다.');
-        }
-
         activities = await db.activity.findMany({
           ...baseQuery,
           where: location
             ? {
                 location,
                 tags: {
-                  hasSome: currentUser.tags,
+                  hasSome: tags,
                 },
               }
             : {
                 tags: {
-                  hasSome: currentUser.tags,
+                  hasSome: tags,
                 },
               },
           orderBy: {

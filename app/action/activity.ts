@@ -5,6 +5,7 @@ import db from '@/lib/db';
 import { ActionType } from '@/type';
 import { Activity } from '@prisma/client';
 import { getCurrentUserId } from '@/app/data/user';
+import { revalidateTag } from 'next/cache';
 
 export const createActivity = async ({
   title,
@@ -43,6 +44,8 @@ export const createActivity = async ({
     });
 
     if (!newActivity) return { success: false, message: '활동 생성에 실패하였습니다.' };
+
+    revalidateTag('activityList');
 
     return {
       success: true,

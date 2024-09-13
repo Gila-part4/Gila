@@ -4,7 +4,7 @@ import { ActionType } from '@/type';
 import { Question } from '@prisma/client';
 import { getCurrentUserId } from '@/app/data/user';
 import db from '@/lib/db';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 export const createQuestion = async ({
   title,
@@ -28,7 +28,7 @@ export const createQuestion = async ({
 
     if (!question) return { success: false, message: '질문 생성에 실패하였습니다.' };
 
-    revalidatePath('/question-list', 'page');
+    revalidateTag('questionList');
 
     return {
       success: true,
