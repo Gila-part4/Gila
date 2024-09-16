@@ -97,8 +97,8 @@ export default function ActivitySlideContainer() {
           <span className="text-xl text-primary"> 길라</span>를 추천해드릴께요!
         </p>
       </div>
-      {userLocation[0] ? (
-        <ActivitySlide recommendList={data?.activities} />
+      {userLocation[0] && data ? (
+        <ActivitySlide recommendList={data.activities} />
       ) : (
         <div className="px-5">
           <ActivityCardSkeleton />
