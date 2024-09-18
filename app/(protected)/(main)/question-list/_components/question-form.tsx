@@ -12,27 +12,7 @@ import { toast } from 'sonner';
 import { useTransition } from 'react';
 import LocationSelectDrawer from '@/components/location-select-drawer';
 import PrimaryCTAButton from '@/components/common/primary-CTA-button';
-
-const FormFields = [
-  {
-    name: 'location',
-    label: '장소',
-    placeholder: '장소를 입력해 주세요',
-    type: 'text',
-  },
-  {
-    name: 'title',
-    label: '제목',
-    placeholder: '제목을 입력해 주세요',
-    type: 'text',
-  },
-  {
-    name: 'content',
-    label: '내용',
-    placeholder: '내용을 입력해 주세요',
-    type: 'textarea',
-  },
-];
+import { QuestionFormFields } from '@/constants/form-schema';
 
 const FormSchema = z.object({
   title: z
@@ -88,7 +68,7 @@ export default function QuestionForm() {
             name="location"
             render={({ field: { onChange } }) => (
               <FormItem>
-                <FormLabel className="text-base">{FormFields[0].label}</FormLabel>
+                <FormLabel className="text-base">{QuestionFormFields[0].label}</FormLabel>
                 <FormControl>
                   <LocationSelectDrawer onChange={onChange} />
                 </FormControl>
@@ -100,11 +80,11 @@ export default function QuestionForm() {
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">{FormFields[1].label}</FormLabel>
+                <FormLabel className="text-base">{QuestionFormFields[1].label}</FormLabel>
                 <FormControl>
                   <Input
-                    type={FormFields[1].type}
-                    placeholder={FormFields[1].placeholder}
+                    type={QuestionFormFields[1].type}
+                    placeholder={QuestionFormFields[1].placeholder}
                     {...field}
                     className="text-sm"
                   />
@@ -117,10 +97,10 @@ export default function QuestionForm() {
             name="content"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">{FormFields[2].label}</FormLabel>
+                <FormLabel className="text-base">{QuestionFormFields[2].label}</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder={FormFields[2].placeholder}
+                    placeholder={QuestionFormFields[2].placeholder}
                     {...field}
                     className="text-sm"
                   />

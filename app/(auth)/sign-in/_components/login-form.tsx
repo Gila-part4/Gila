@@ -20,16 +20,7 @@ import { useRouter } from 'next/navigation';
 import PasswordInput from '@/components/ui/password-input';
 import { cn } from '@/lib/utils';
 import PrimaryCTAButton from '@/components/common/primary-CTA-button';
-
-const loginFields = [
-  { name: 'email', label: '이메일', placeholder: '이메일을 입력해 주세요', type: 'text' },
-  {
-    name: 'password',
-    label: '비밀번호',
-    placeholder: '비밀번호를 입력해 주세요',
-    type: 'password',
-  },
-];
+import { loginFields } from '@/constants/form-schema';
 
 export default function LoginForm() {
   const [isVisible, setIsVisible] = useState(false);
