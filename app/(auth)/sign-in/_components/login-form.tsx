@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useState, useTransition } from 'react';
+import { useTransition } from 'react';
 import { LoginSchemaType } from '@/type';
 import { toast } from 'sonner';
 import { login } from '@/app/action/user';
@@ -23,7 +23,6 @@ import PrimaryCTAButton from '@/components/common/primary-CTA-button';
 import { loginFields } from '@/constants/form-schema';
 
 export default function LoginForm() {
-  const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
@@ -36,10 +35,6 @@ export default function LoginForm() {
     },
     mode: 'onBlur',
   });
-
-  const handleVisibility = () => {
-    setIsVisible(!isVisible);
-  };
 
   function onSubmit(values: LoginSchemaType) {
     startTransition(async () => {
@@ -67,8 +62,6 @@ export default function LoginForm() {
                 <FormControl>
                   {field.type === 'password' ? (
                     <PasswordInput
-                      type={isVisible ? 'text' : 'password'}
-                      handleToggle={handleVisibility}
                       placeholder={field.placeholder}
                       className={cn(
                         form.getFieldState(field.name as keyof LoginSchemaType).error &&

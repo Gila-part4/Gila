@@ -28,8 +28,6 @@ export default function RegisterForm() {
   const [isCheck, setIsCheck] = useState(false);
   const [emailKey, setEmailKey] = useState('');
   const [validEmail, setValidEmail] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
@@ -76,14 +74,6 @@ export default function RegisterForm() {
       router.replace('/sign-in');
     });
   }
-
-  const toggleVisibility = (name: string) => {
-    if (name === 'password') {
-      setIsVisible(!isVisible);
-    } else {
-      setIsConfirmVisible(!isConfirmVisible);
-    }
-  };
 
   return (
     <Form {...form}>
@@ -194,8 +184,6 @@ export default function RegisterForm() {
               <FormLabel>{registerFields[3].label}</FormLabel>
               <FormControl className="text-base">
                 <PasswordInput
-                  type={isVisible ? 'text' : 'password'}
-                  handleToggle={() => toggleVisibility(registerFields[3].name)}
                   placeholder={registerFields[3].placeholder}
                   autoComplete="off"
                   className={cn(
@@ -220,8 +208,6 @@ export default function RegisterForm() {
               <FormLabel>{registerFields[4].label}</FormLabel>
               <FormControl className="text-base">
                 <PasswordInput
-                  type={isConfirmVisible ? 'text' : 'password'}
-                  handleToggle={() => toggleVisibility(registerFields[4].name)}
                   placeholder={registerFields[4].placeholder}
                   autoComplete="off"
                   className={cn(
