@@ -18,27 +18,7 @@ import { createQuestion } from '@/app/action/question';
 import { toast } from 'sonner';
 import { useTransition } from 'react';
 import LocationSelectDrawer from '@/components/location-select-drawer';
-
-const FormFields = [
-  {
-    name: 'location',
-    label: '장소',
-    placeholder: '장소를 입력해 주세요',
-    type: 'text',
-  },
-  {
-    name: 'title',
-    label: '제목',
-    placeholder: '제목을 입력해 주세요',
-    type: 'text',
-  },
-  {
-    name: 'content',
-    label: '내용',
-    placeholder: '내용을 입력해 주세요',
-    type: 'textarea',
-  },
-];
+import { QuestionFormFields } from '@/constants/form-schema';
 
 const FormSchema = z.object({
   title: z
@@ -95,7 +75,7 @@ export default function MyQuestionForm({ toggleModal }: { toggleModal: () => voi
             name="location"
             render={({ field: { onChange } }) => (
               <FormItem>
-                <FormLabel className="text-sm">{FormFields[0].label}</FormLabel>
+                <FormLabel className="text-sm">{QuestionFormFields[0].label}</FormLabel>
                 <FormControl>
                   <LocationSelectDrawer onChange={onChange} />
                 </FormControl>
@@ -110,11 +90,11 @@ export default function MyQuestionForm({ toggleModal }: { toggleModal: () => voi
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm">{FormFields[1].label}</FormLabel>
+                <FormLabel className="text-sm">{QuestionFormFields[1].label}</FormLabel>
                 <FormControl>
                   <Input
-                    type={FormFields[1].type}
-                    placeholder={FormFields[1].placeholder}
+                    type={QuestionFormFields[1].type}
+                    placeholder={QuestionFormFields[1].placeholder}
                     {...field}
                     className="text-xs"
                   />
@@ -130,10 +110,10 @@ export default function MyQuestionForm({ toggleModal }: { toggleModal: () => voi
             name="content"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm">{FormFields[2].label}</FormLabel>
+                <FormLabel className="text-sm">{QuestionFormFields[2].label}</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder={FormFields[2].placeholder}
+                    placeholder={QuestionFormFields[2].placeholder}
                     {...field}
                     className="text-xs"
                   />
