@@ -13,6 +13,7 @@ import {
 import Spinner from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import UploadButton from '@/components/upload-button';
+import { AnswerFormFields } from '@/constants/form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FileImage, X } from 'lucide-react';
 import Image from 'next/image';
@@ -20,13 +21,6 @@ import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-
-const FormFields = {
-  name: 'content',
-  label: '답변하기',
-  placeholder: '답변을 입력해 주세요',
-  type: 'textarea',
-};
 
 const FormSchema = z.object({
   content: z
@@ -98,7 +92,7 @@ export default function AnswerForm({ questionId }: { questionId: string }) {
                     CustomButton={customButton}
                   />
                 </div>
-                <FormLabel className="pl-1 text-sm">{FormFields.label}</FormLabel>
+                <FormLabel className="pl-1 text-sm">{AnswerFormFields.label}</FormLabel>
                 {loading && (
                   <div className="flex items-center justify-center">
                     <Spinner />
@@ -116,7 +110,11 @@ export default function AnswerForm({ questionId }: { questionId: string }) {
                   </div>
                 )}
                 <FormControl>
-                  <Textarea placeholder={FormFields.placeholder} {...field} className="text-xs" />
+                  <Textarea
+                    placeholder={AnswerFormFields.placeholder}
+                    {...field}
+                    className="text-xs"
+                  />
                 </FormControl>
                 <div className="absolute -bottom-6">
                   <FormMessage className="text-xs text-red" />

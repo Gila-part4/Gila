@@ -22,36 +22,12 @@ import { cn } from '@/lib/utils';
 import PrimaryCTAButton from '@/components/common/primary-CTA-button';
 import { sendEmail } from '@/app/action/mail';
 import { Button } from '@/components/ui/button';
-
-const registerFields = [
-  { name: 'nickname', label: '닉네임', placeholder: '닉네임을 입력해 주세요', type: 'text' },
-  { name: 'email', label: '이메일', placeholder: '이메일을 입력해 주세요', type: 'text' },
-  {
-    name: 'emailCheck',
-    label: '인증번호입력',
-    placeholder: '인증번호를 입력해 주세요',
-    type: 'text',
-  },
-  {
-    name: 'password',
-    label: '비밀번호',
-    placeholder: '비밀번호를 입력해 주세요',
-    type: 'password',
-  },
-  {
-    name: 'confirmPassword',
-    label: '비밀번호 확인',
-    placeholder: '비밀번호를 한 번 더 입력해 주세요',
-    type: 'password',
-  },
-];
+import { registerFields } from '@/constants/form-schema';
 
 export default function RegisterForm() {
   const [isCheck, setIsCheck] = useState(false);
   const [emailKey, setEmailKey] = useState('');
   const [validEmail, setValidEmail] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
@@ -99,84 +75,155 @@ export default function RegisterForm() {
     });
   }
 
-  const handleVisibility = (name: string) => {
-    if (name === 'password') {
-      setIsVisible(!isVisible);
-    } else {
-      setIsConfirmVisible(!isConfirmVisible);
-    }
-  };
-
-  const settingPasswordInputType = (name: string) => {
-    if (name === 'password') return isVisible;
-    return isConfirmVisible;
-  };
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
         <h1 className="mb-2 text-xl font-semibold">회원가입</h1>
-        {registerFields.map((field) => (
-          <FormField
-            key={field.name}
-            control={form.control}
-            name={field.name as keyof RegisterSchemaType}
-            render={({ field: controllerField }) => (
-              <FormItem className="relative">
-                <FormLabel>{field.label}</FormLabel>
-                <FormControl className="text-base">
-                  {field.type === 'password' ? (
-                    <PasswordInput
-                      type={settingPasswordInputType(field.name) ? 'text' : 'password'}
-                      handleToggle={() => handleVisibility(field.name)}
-                      placeholder={field.placeholder}
-                      autoComplete="off"
-                      className={cn(
-                        form.getFieldState(field.name as keyof RegisterSchemaType).error &&
-                          'bg-red bg-opacity-10 border-red',
-                        'border border-gray-300',
-                      )}
-                      {...controllerField}
-                    />
-                  ) : (
-                    <div className="relative">
-                      <Input
-                        disabled={field.name === 'emailCheck' && !isCheck}
-                        type={field.type}
-                        placeholder={field.placeholder}
-                        className={cn(
-                          form.getFieldState(field.name as keyof RegisterSchemaType).error &&
-                            'bg-red bg-opacity-10 border-red',
-                          'border border-gray-300',
-                        )}
-                        {...controllerField}
-                      />
-                      {(field.name === 'email' || field.name === 'emailCheck') && (
-                        <Button
-                          type="button"
-                          className="text-white absolute top-1/2 right-1 -translate-y-1/2 w-10 h-8"
-                          onClick={field.name === 'email' ? requsetKey : checkKey}
-                          disabled={
-                            field.name === 'email'
-                              ? isCheck ||
-                                !form.getValues('email') ||
-                                !!form.getFieldState('email').invalid
-                              : !isCheck
-                          }
-                        >
-                          {field.name === 'email' ? '인증' : '확인'}
-                        </Button>
-                      )}
-                    </div>
-                  )}
-                </FormControl>
-                <div className="h-5">
-                  <FormMessage className="text-xs" />
+        <FormField
+          control={form.control}
+          name={registerFields[0].name as keyof RegisterSchemaType}
+          render={({ field: controllerField }) => (
+            <FormItem className="relative">
+              <FormLabel>{registerFields[0].label}</FormLabel>
+              <FormControl className="text-base">
+                <div className="relative">
+                  <Input
+                    type={registerFields[0].type}
+                    placeholder={registerFields[0].placeholder}
+                    className={cn(
+                      form.getFieldState(registerFields[0].name as keyof RegisterSchemaType)
+                        .error && 'bg-red bg-opacity-10 border-red',
+                      'border border-gray-300',
+                    )}
+                    {...controllerField}
+                  />
                 </div>
-              </FormItem>
-            )}
-          />
-        ))}
+              </FormControl>
+              <div className="h-5">
+                <FormMessage className="text-xs" />
+              </div>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={registerFields[1].name as keyof RegisterSchemaType}
+          render={({ field: controllerField }) => (
+            <FormItem className="relative">
+              <FormLabel>{registerFields[1].label}</FormLabel>
+              <FormControl className="text-base">
+                <div className="relative">
+                  <Input
+                    type={registerFields[1].type}
+                    placeholder={registerFields[1].placeholder}
+                    className={cn(
+                      form.getFieldState(registerFields[1].name as keyof RegisterSchemaType)
+                        .error && 'bg-red bg-opacity-10 border-red',
+                      'border border-gray-300',
+                    )}
+                    {...controllerField}
+                  />
+                  <Button
+                    type="button"
+                    className="text-white absolute top-1/2 right-1 -translate-y-1/2 w-10 h-8"
+                    onClick={requsetKey}
+                    disabled={
+                      isCheck || !form.getValues('email') || !!form.getFieldState('email').invalid
+                    }
+                  >
+                    인증
+                  </Button>
+                </div>
+              </FormControl>
+              <div className="h-5">
+                <FormMessage className="text-xs" />
+              </div>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={registerFields[2].name as keyof RegisterSchemaType}
+          render={({ field: controllerField }) => (
+            <FormItem className="relative">
+              <FormLabel>{registerFields[2].label}</FormLabel>
+              <FormControl className="text-base">
+                <div className="relative">
+                  <Input
+                    disabled={!isCheck}
+                    type={registerFields[2].type}
+                    placeholder={registerFields[2].placeholder}
+                    className={cn(
+                      form.getFieldState(registerFields[2].name as keyof RegisterSchemaType)
+                        .error && 'bg-red bg-opacity-10 border-red',
+                      'border border-gray-300',
+                    )}
+                    {...controllerField}
+                  />
+                  <Button
+                    type="button"
+                    className="text-white absolute top-1/2 right-1 -translate-y-1/2 w-10 h-8"
+                    onClick={checkKey}
+                    disabled={!isCheck}
+                  >
+                    확인
+                  </Button>
+                </div>
+              </FormControl>
+              <div className="h-5">
+                <FormMessage className="text-xs" />
+              </div>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={registerFields[3].name as keyof RegisterSchemaType}
+          render={({ field: controllerField }) => (
+            <FormItem className="relative">
+              <FormLabel>{registerFields[3].label}</FormLabel>
+              <FormControl className="text-base">
+                <PasswordInput
+                  placeholder={registerFields[3].placeholder}
+                  autoComplete="off"
+                  className={cn(
+                    form.getFieldState(registerFields[3].name as keyof RegisterSchemaType).error &&
+                      'bg-red bg-opacity-10 border-red',
+                    'border border-gray-300',
+                  )}
+                  {...controllerField}
+                />
+              </FormControl>
+              <div className="h-5">
+                <FormMessage className="text-xs" />
+              </div>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={registerFields[4].name as keyof RegisterSchemaType}
+          render={({ field: controllerField }) => (
+            <FormItem className="relative">
+              <FormLabel>{registerFields[4].label}</FormLabel>
+              <FormControl className="text-base">
+                <PasswordInput
+                  placeholder={registerFields[4].placeholder}
+                  autoComplete="off"
+                  className={cn(
+                    form.getFieldState(registerFields[4].name as keyof RegisterSchemaType).error &&
+                      'bg-red bg-opacity-10 border-red',
+                    'border border-gray-300',
+                  )}
+                  {...controllerField}
+                />
+              </FormControl>
+              <div className="h-5">
+                <FormMessage className="text-xs" />
+              </div>
+            </FormItem>
+          )}
+        />
         <PrimaryCTAButton
           text="회원가입"
           disabled={isPending || !form.formState.isValid || !validEmail}

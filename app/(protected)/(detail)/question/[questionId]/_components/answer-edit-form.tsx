@@ -13,6 +13,7 @@ import {
 import Spinner from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import UploadButton from '@/components/upload-button';
+import { EditFormFields } from '@/constants/form-schema';
 import { AnswerWithUser } from '@/type';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FileImage, X } from 'lucide-react';
@@ -27,13 +28,6 @@ interface Props {
   answerId: string;
   handleEditAnswer: () => void;
 }
-
-const FormFields = {
-  name: 'content',
-  label: '수정하기',
-  placeholder: '답변을 입력해 주세요',
-  type: 'textarea',
-};
 
 const FormSchema = z.object({
   content: z
@@ -107,7 +101,7 @@ export default function AnswerEditForm({ answerId, defaultValue, handleEditAnswe
                   />
                 </div>
 
-                <FormLabel className="text-sm">{FormFields.label}</FormLabel>
+                <FormLabel className="text-sm">{EditFormFields.label}</FormLabel>
                 {loading && (
                   <div className="flex items-center justify-center">
                     <Spinner />
@@ -126,7 +120,11 @@ export default function AnswerEditForm({ answerId, defaultValue, handleEditAnswe
                   </div>
                 )}
                 <FormControl>
-                  <Textarea placeholder={FormFields.placeholder} {...field} className="text-xs" />
+                  <Textarea
+                    placeholder={EditFormFields.placeholder}
+                    {...field}
+                    className="text-xs"
+                  />
                 </FormControl>
                 <div className="absolute -bottom-6">
                   <FormMessage className="text-xs text-red" />
