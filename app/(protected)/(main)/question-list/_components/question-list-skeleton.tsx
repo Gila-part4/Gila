@@ -8,7 +8,7 @@ export default function QuestionListSkeleton() {
         <h1 className="text-xl font-semibold">질문 목록</h1>
         <Skeleton className="w-[80px] h-[30px] bg-gray-200" />
       </div>
-      <div className="pt-3 w-full">
+      <div className="flex flex-col pt-3 w-full gap-3">
         <QuestionCardSkeleton />
         <QuestionCardSkeleton />
         <QuestionCardSkeleton />
