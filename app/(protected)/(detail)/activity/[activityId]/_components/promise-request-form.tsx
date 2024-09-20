@@ -14,7 +14,7 @@ export default function PromiseRequestForm({
   currentUser,
 }: {
   activity: ActivityWithRequest;
-  currentUser: string;
+  currentUser?: string;
 }) {
   const { startDate, endDate, id, maximumCount, activityRequests } = activity;
   const [isPending, startTransition] = useTransition();
