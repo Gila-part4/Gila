@@ -10,6 +10,9 @@ export default function QuestionListSkeleton() {
       </div>
       <div className="pt-3 w-full">
         <QuestionCardSkeleton />
+        <QuestionCardSkeleton />
+        <QuestionCardSkeleton />
+        <QuestionCardSkeleton />
       </div>
     </>
   );
