@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { getQuestionById } from '@/app/data/question';
-import { getCurrentUser } from '@/app/data/user';
 import { Separator } from '@/components/ui/separator';
+import { auth } from '@/auth';
 import QuestionDetail from './_components/question-detail';
 import AnswerList from './_components/answer-list';
 import AnswerForm from './_components/answer-form';
@@ -12,7 +12,7 @@ interface Params {
 
 export default async function Page({ params }: { params: Params }) {
   const questionDetail = await getQuestionById({ questionId: params.questionId, answerTake: 10 });
-  const currentUser = await getCurrentUser();
+  const user = await auth();
   if (!questionDetail) return <div>없음</div>;
   return (
     <div className="p-4 flex flex-col gap-4">
@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: Params }) {
       <AnswerList
         answers={questionDetail.answers}
         totalCount={questionDetail._count.answers}
-        userId={currentUser.id}
+        userId={user?.user?.id}
         answerCursorId={questionDetail.answerCursorId}
         questionId={questionDetail.id}
       />

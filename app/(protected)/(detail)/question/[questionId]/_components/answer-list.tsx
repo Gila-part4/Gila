@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState, useTransition } from 'react';
 interface Props {
   answers: AnswerWithUser[];
   totalCount: number;
-  userId: string;
+  userId?: string;
   answerCursorId: string | null;
   questionId: string;
 }
