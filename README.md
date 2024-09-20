@@ -77,11 +77,11 @@ Gila와 함께 새로운 사람들과의 만남을 통해 잊지 못할 추억�
 ## 팀원 소개
 
 ## Team
-|<img src="https://avatars.githubusercontent.com/u/137033202?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/113277713?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/118117392?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/159929147?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/150333046?v=4" width="150" height="150"/>|
+|<img src="https://avatars.githubusercontent.com/u/137033202?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/113277713?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/118117392?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/159929147?v=4" width="150" height="150"/>|
 |:-:|:-:|:-:|:-:|:-:|
 |팀장: 박상준<br/>[@sj0724](https://github.com/sj0724)|팀원: 권주현<br/>[@kuum97](https://github.com/kuum97)|팀원: 박성재<br/>[@Batrnan](https://github.com/Batrnan)|팀원: 이주안<br/>[@juan0444](https://github.com/juan0444)|팀원: 홍진호<br/>[@jinho0941](https://github.com/jinho0941)|
 
-- 박상준: product managing, 질문 페이지, 대시보드 - 받은 신청, 토픽 페이지
+- 박상준: product managing, 질문 페이지, 대시보드 - 받은 신청, 토픽 페이지, 가까운 지역 활동 추천, 채팅
 - 권주현: product managing, 활동 페이지, 대시보드 - 활동/보낸 신청
 - 박성재: design, 대시보드 페이지, 대시보드 - 질문
 - 이주안: design, 프로필 페이지, 대시보드 - 찜
