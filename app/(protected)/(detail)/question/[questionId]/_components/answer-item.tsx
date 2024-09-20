@@ -12,7 +12,7 @@ import AnswerKebab from './answer-kebab';
 
 interface Props {
   answer: AnswerWithUser;
-  userId: string;
+  userId?: string;
 }
 
 export default function AnswerItem({ answer, userId }: Props) {

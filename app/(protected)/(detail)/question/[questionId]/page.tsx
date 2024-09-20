@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+import { getQuestionById } from '@/app/data/question';
 import { Separator } from '@/components/ui/separator';
 import { Suspense } from 'react';
 import QuestionDetail from './_components/question-detail';
@@ -12,6 +13,8 @@ interface Params {
 }
 
 export default async function Page({ params }: { params: Params }) {
+  const questionDetail = await getQuestionById({ questionId: params.questionId, answerTake: 10 });
+  if (!questionDetail) return <div>없음</div>;
   return (
     <div className="p-4 flex flex-col gap-4">
       <Suspense fallback={<QuestionDetailSkeleton />}>
