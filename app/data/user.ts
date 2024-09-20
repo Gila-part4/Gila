@@ -59,26 +59,8 @@ export const getCurrentUserId = async (): Promise<string> => {
   }
 };
 
-export const getCurrentUserProfile = async (userId: string): Promise<User | null> => {
-  try {
-    // const userId = await getCurrentUserId();
-
-    const userProfile = await db.user.findUnique({
-      where: { id: userId },
-    });
-
-    if (!userProfile) {
-      throw new Error('유저 정보를 찾을 수 없습니다.');
-    }
-
-    return userProfile;
-  } catch (error) {
-    throw new Error('유저 정보를 가져오는 중에 에러가 발생하였습니다.');
-  }
-};
-
 export const getUserProfileWithIntroducedInfos = async (
-  userId: string,
+  userId?: string,
 ): Promise<{
   user: User;
   averageReviewScore: number;

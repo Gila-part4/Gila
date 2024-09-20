@@ -39,8 +39,8 @@ export const authConfig = {
   ],
   callbacks: {
     jwt({ token, user }) {
-      if (user.id) {
-        token.id = user.id;
+      if (user) {
+        if (user.id) token.id = user.id;
       }
       return token;
     },
