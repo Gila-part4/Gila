@@ -2,7 +2,7 @@
 
 import AnswerItem from '@/app/(protected)/(detail)/question/[questionId]/_components/answer-item';
 import getAnswers from '@/app/data/answer';
-import Spinner from '@/components/ui/spinner';
+import AnswerCardSkeleton from '@/components/skeletons/answer-card-skeleton';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import { AnswerWithUser } from '@/type';
 import { useCallback, useEffect, useState, useTransition } from 'react';
@@ -65,7 +65,7 @@ export default function AnswerList({
           </ul>
         )}
       </div>
-      {isPending && <Spinner />}
+      {isPending && <AnswerCardSkeleton />}
     </div>
   );
 }
