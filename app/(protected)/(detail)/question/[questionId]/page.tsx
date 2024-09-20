@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Params }) {
         questionId={questionDetail.id}
       />
       <Separator className="bg-gray_300" />
-      <AnswerForm questionId={questionDetail.id} />
+      <AnswerForm />
     </div>
   );
 }

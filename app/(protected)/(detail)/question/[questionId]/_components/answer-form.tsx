@@ -17,6 +17,7 @@ import { AnswerFormFields } from '@/constants/form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FileImage, X } from 'lucide-react';
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -29,10 +30,12 @@ const FormSchema = z.object({
     .max(200, { message: '답변은 200자 이내로 입력해 주세요.' }),
 });
 
-export default function AnswerForm({ questionId }: { questionId: string }) {
+export default function AnswerForm() {
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const params = useParams<{ questionId: string }>();
+  const { questionId } = params;
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
