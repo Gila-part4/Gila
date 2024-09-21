@@ -26,7 +26,7 @@ export default function ImageCard({
 }: Props) {
   return (
     <Link href={`/activity/${activityId}`}>
-      <Card className="h-[400px] flex flex-col items-start border-none shadow-md hover:shadow-xl">
+      <Card className="h-[400px] flex flex-col items-start border shadow-md hover:shadow-xl">
         <div className="flex justify-center w-full h-full px-2 pt-2 rounded-md">
           <div className="relative w-full h-full rounded-md">
             <Image

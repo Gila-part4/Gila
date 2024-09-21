@@ -58,7 +58,7 @@ export default function ReviewsCard({
   };
 
   return (
-    <div className="relative flex w-full gap-6 p-3 border rounded-lg">
+    <div className="relative flex w-full gap-6 p-3 border shadow-md hover:shadow-xl rounded-lg">
       <div className="flex flex-col justify-center w-full gap-2 overflow-hidden">
         <h1 className="w-full text-sm font-bold truncate">{title}</h1>
         <div className="flex flex-col gap-2 text-xs">
