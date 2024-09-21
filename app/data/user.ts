@@ -3,21 +3,25 @@ import { auth } from '@/auth';
 import db from '@/lib/db';
 import { User } from '@/type';
 
-export const getCurrentUserEmail = async (): Promise<string> => {
+export const getSessionUserData = async () => {
   const session = await auth();
   try {
     if (!session) throw new Error('현재 로그인되어있지 않습니다.');
-    const email = session.user?.email;
+    if (!session.user) throw new Error('유저 데이터가 없습니다.');
+    const { email, name, id, image } = session.user;
     if (!email) throw new Error('존재하지 않는 이메일 입니다.');
+    if (!name) throw new Error('존재하지 않는 이름 입니다.');
+    if (!id) throw new Error('존재하지 않는 id 입니다.');
+    if (!image) throw new Error('이미지가 존재하지 않습니다.');
 
-    return email;
+    return { email, name, id, image };
   } catch (error) {
     throw new Error('이메일을 가져오는중에 에러가 발생하였습니다.');
   }
 };
 
 export const getCurrentUser = async (): Promise<User> => {
-  const email = await getCurrentUserEmail();
+  const { email } = await getSessionUserData();
   try {
     const user = await db.user.findUnique({
       where: {
@@ -42,7 +46,7 @@ export const getCurrentUser = async (): Promise<User> => {
 };
 
 export const getCurrentUserId = async (): Promise<string> => {
-  const email = await getCurrentUserEmail();
+  const { email } = await getSessionUserData();
   try {
     const user = await db.user.findUnique({
       where: { email },
@@ -60,7 +64,7 @@ export const getCurrentUserId = async (): Promise<string> => {
 };
 
 export const getUserProfileWithIntroducedInfos = async (
-  userId?: string,
+  userId: string,
 ): Promise<{
   user: User;
   averageReviewScore: number;
