@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import PlusDiv from '@/components/common/plus-div';
 import { Suspense } from 'react';
+import { getSessionUserData } from '@/app/data/user';
 import MyActivityContainer from './_components/my-activity-container';
 import MyActivitySkeleton from './_components/my-activity-skeleton';
-import { getSessionUserData } from '@/app/data/user';
 
 export default async function Page() {
   const { name } = await getSessionUserData();
