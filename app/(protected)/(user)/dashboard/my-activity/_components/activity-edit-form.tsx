@@ -13,16 +13,7 @@ import { editActivity } from '@/app/action/activity';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { ActivityWithFavoriteAndCount } from '@/type';
-
-const ActivityCreateFormSchema = z.object({
-  title: z.string().min(1, { message: '제목은 필수 요소입니다.' }),
-  tags: z.string().array(),
-  description: z.string(),
-  schedule: z.object({ from: z.date(), to: z.date() }, { message: '일정은 필수 요소입니다.' }),
-  location: z.string({ message: '지역은 필수 요소입니다.' }),
-  images: z.any().optional(),
-  maximumCount: z.string(),
-});
+import { ActivityCreateFormSchema } from '@/constants/form-schema';
 
 export type ActivityCreateFormData = z.infer<typeof ActivityCreateFormSchema>;
 
