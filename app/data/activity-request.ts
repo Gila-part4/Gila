@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { getCurrentUserId } from '@/app/data/user';
+import { getSessionUserData } from '@/app/data/user';
 import db from '@/lib/db';
 import { RequestWithActivity, RequestWithReqUserAndActivity } from '@/type';
 
@@ -12,11 +12,11 @@ export const getMySentRequests = async ({
   cursor?: string;
   take?: number;
 }): Promise<{ validRequests: RequestWithActivity[]; cursorId: string | null }> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
   const nowDate = new Date();
   try {
     const requests = await db.activityRequest.findMany({
-      where: { requestUserId: userId },
+      where: { requestUserId: id },
       include: {
         activity: true,
       },
@@ -56,11 +56,11 @@ export const getMyReceivedRequests = async ({
   take?: number;
 }): Promise<{ requests: RequestWithReqUserAndActivity[]; cursorId: string | null }> => {
   try {
-    const currentUserId = await getCurrentUserId();
+    const { id } = await getSessionUserData();
     const nowDate = new Date();
 
     const userActivities = await db.activity.findMany({
-      where: { userId: currentUserId, endDate: { gte: nowDate } },
+      where: { userId: id, endDate: { gte: nowDate } },
       select: {
         activityRequests: {
           where: {

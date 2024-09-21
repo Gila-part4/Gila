@@ -4,7 +4,7 @@
 
 import db from '@/lib/db';
 import { QuestionWithUserAndAnswers } from '@/type';
-import { getCurrentUserId } from '@/app/data/user';
+import { getSessionUserData } from '@/app/data/user';
 
 export const getQuestions = async ({
   order = 'recent',
@@ -93,11 +93,11 @@ export const getMyQuestions = async ({
   answerTake?: number;
   cursor?: string;
 }): Promise<{ questions: QuestionWithUserAndAnswers[]; cursorId: string | null }> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
 
   const questions = await db.question.findMany({
     where: {
-      userId,
+      userId: id,
     },
     include: {
       answers: {

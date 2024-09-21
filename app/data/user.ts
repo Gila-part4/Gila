@@ -45,24 +45,6 @@ export const getCurrentUser = async (): Promise<User> => {
   }
 };
 
-export const getCurrentUserId = async (): Promise<string> => {
-  const { email } = await getSessionUserData();
-  try {
-    const user = await db.user.findUnique({
-      where: { email },
-      select: {
-        id: true,
-      },
-    });
-
-    if (!user) throw new Error('존재하지 않는 유저 아이디 입니다.');
-
-    return user.id;
-  } catch (error) {
-    throw new Error('유저 아이디를 가져오는중에 에러가 발생하였습니다.');
-  }
-};
-
 export const getUserProfileWithIntroducedInfos = async (
   userId: string,
 ): Promise<{
@@ -117,10 +99,10 @@ export const getUserProfileWithIntroducedInfos = async (
 };
 
 export const getIsFirstLogin = async (): Promise<boolean> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
   try {
     const user = await db.user.findUnique({
-      where: { id: userId },
+      where: { id },
     });
     if (!user) throw new Error('해당 유저 정보가 존재하지 않습니다.');
 

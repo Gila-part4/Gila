@@ -1,13 +1,13 @@
 import { createUploadthing, type FileRouter } from 'uploadthing/next';
 import { createRouteHandler } from 'uploadthing/next';
-import { getCurrentUserId } from '@/app/data/user';
+import { getSessionUserData } from '@/app/data/user';
 
 const f = createUploadthing();
 export const ourFileRouter = {
   imageUploader: f({ image: { maxFileSize: '4MB', maxFileCount: 5 } })
     .middleware(async () => {
-      const userId = await getCurrentUserId();
-      return { userId };
+      const { id } = await getSessionUserData();
+      return { userId: id };
     })
     .onUploadComplete(async ({ metadata }) => {
       return { uploadedBy: metadata.userId };

@@ -8,7 +8,7 @@ import { ActionType, LoginSchemaType, RegisterSchemaType } from '@/type';
 import { User } from '@prisma/client';
 import { AuthError } from 'next-auth';
 import { cookies } from 'next/headers';
-import { getCurrentUserId } from '@/app/data/user';
+import { getSessionUserData } from '@/app/data/user';
 
 export const findUserByNickname = async (nickname: string): Promise<ActionType<User> | null> => {
   try {
@@ -126,12 +126,12 @@ export const logout = async (): Promise<ActionType<null>> => {
 };
 
 export const editNickname = async (newNickname: string): Promise<ActionType<User>> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
   try {
     const checkNickName = await findUserByNickname(newNickname);
     if (checkNickName) return { success: false, message: '이미 사용중인 닉네임입니다.' };
     const updatedUser = await db.user.update({
-      where: { id: userId },
+      where: { id },
       data: { nickname: newNickname },
     });
 
@@ -151,10 +151,10 @@ export const editNickname = async (newNickname: string): Promise<ActionType<User
 };
 
 export const editPassword = async (newPassword: string): Promise<ActionType<User>> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
   try {
     const updatedUser = await db.user.update({
-      where: { id: userId },
+      where: { id },
       data: { password: newPassword },
     });
 
@@ -174,11 +174,11 @@ export const editPassword = async (newPassword: string): Promise<ActionType<User
 };
 
 export const editTags = async (tags: string[]): Promise<ActionType<User>> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
 
   try {
     const updatedUser = await db.user.update({
-      where: { id: userId },
+      where: { id },
       data: { tags },
     });
 
@@ -195,11 +195,11 @@ export const editTags = async (tags: string[]): Promise<ActionType<User>> => {
 };
 
 export const editImage = async (url: string): Promise<ActionType<User>> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
 
   try {
     const updatedUser = await db.user.update({
-      where: { id: userId },
+      where: { id },
       data: { image: url },
     });
 
@@ -219,11 +219,11 @@ export const editImage = async (url: string): Promise<ActionType<User>> => {
 };
 
 export const setFirstLoginToFalse = async (): Promise<ActionType<null>> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
 
   try {
     const user = await db.user.update({
-      where: { id: userId },
+      where: { id },
       data: {
         isFirstLogin: false,
       },

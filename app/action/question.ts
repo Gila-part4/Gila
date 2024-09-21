@@ -2,7 +2,7 @@
 
 import { ActionType } from '@/type';
 import { Question } from '@prisma/client';
-import { getCurrentUserId } from '@/app/data/user';
+import { getSessionUserData } from '@/app/data/user';
 import db from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
@@ -15,11 +15,11 @@ export const createQuestion = async ({
   content: string;
   location: string;
 }): Promise<ActionType<Question>> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
   try {
     const question = await db.question.create({
       data: {
-        userId,
+        userId: id,
         title,
         content,
         location,
