@@ -1,10 +1,10 @@
 import { getActivityById } from '@/app/data/activity';
-import { auth } from '@/auth';
+import { getSessionUserData } from '@/app/data/user';
 import PromiseRequestForm from './promise-request-form';
 
 export default async function RequestContainer({ activityId }: { activityId: string }) {
   const activity = await getActivityById(activityId);
-  const user = await auth();
+  const { id } = await getSessionUserData();
 
-  return <PromiseRequestForm activity={activity} currentUser={user?.user?.id} />;
+  return <PromiseRequestForm activity={activity} currentUser={id} />;
 }

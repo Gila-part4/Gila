@@ -2,10 +2,10 @@ import { ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import NavSideMenu from '@/components/common/nav-sidemenu';
-import { auth } from '@/auth';
+import { getSessionUserData } from '@/app/data/user';
 
 export default async function NavigationBase({ children }: { children?: ReactNode }) {
-  const user = await auth();
+  const { image } = await getSessionUserData();
 
   return (
     <nav className="tall:sticky fixed left-0 top-0 z-50 flex items-center justify-between h-16 p-3 bg-white border-b bg-opacity-95 w-full">
@@ -25,7 +25,7 @@ export default async function NavigationBase({ children }: { children?: ReactNod
       </div>
       {children && <div className="col-span-2">{children}</div>}
       <div className="flex items-center justify-end w-[70px]">
-        <NavSideMenu userAvatar={user?.user?.image} />
+        <NavSideMenu userAvatar={image} />
       </div>
     </nav>
   );
