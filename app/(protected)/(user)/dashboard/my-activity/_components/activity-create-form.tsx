@@ -15,11 +15,11 @@ import { createActivity } from '@/app/action/activity';
 
 const ActivityCreateFormSchema = z.object({
   title: z.string().min(1, { message: '제목은 필수 요소입니다.' }),
-  tags: z.string().array(),
+  tags: z.string().array().min(1),
   description: z.string().min(1, { message: '설명은 필수 요소입니다.' }),
   schedule: z.object({ from: z.date(), to: z.date() }, { message: '일정은 필수 요소입니다.' }),
   location: z.string().min(1, { message: '지역은 필수 요소입니다.' }),
-  images: z.any().optional(),
+  images: z.string().array().min(1),
   maximumCount: z.string(),
 });
 
