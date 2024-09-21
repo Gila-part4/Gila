@@ -17,7 +17,7 @@ export default function ActivityListCard({ activity }: Props) {
 
   return (
     <Link href={`/activity/${activity.id}`}>
-      <Card className="h-[400px] flex flex-col items-start border-none shadow-md hover:shadow-xl bg-white relative">
+      <Card className="h-[400px] flex flex-col items-start border shadow-md hover:shadow-xl bg-white relative">
         {endDate < nowDate && (
           <div className="absolute inset-0 opacity-50 bg-gray_300 rounded-lg z-10 flex flex-col justify-center items-center" />
         )}

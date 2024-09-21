@@ -60,7 +60,7 @@ export default function SortingDropdown({ sorts }: Props) {
           </div>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="border-none bg-opacity-90 bg-white_light" align="end">
+      <DropdownMenuContent className="border-none bg-white_light z-40" align="end">
         {sorts.map((sort) => (
           <DropdownMenuItem asChild key={sort.en}>
             <button

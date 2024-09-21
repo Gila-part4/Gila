@@ -23,7 +23,7 @@ export default function WishlistImageCard({
   const formatDate = formatDateRange({ startDateString: startDate, endDateString: endDate });
 
   return (
-    <div className="relative flex w-full gap-6 p-3 border rounded-lg">
+    <div className="relative flex w-full gap-6 p-3 rounded-lg border shadow-md hover:shadow-xl">
       <div className="w-[110px] h-[110px] relative rounded-lg overflow-hidden flex-shrink-0">
         <Image src={imgSrc} alt="썸네일" fill style={{ objectFit: 'cover' }} />
       </div>

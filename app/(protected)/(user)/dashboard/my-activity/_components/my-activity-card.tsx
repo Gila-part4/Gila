@@ -73,6 +73,7 @@ export default function MyActivityCard({ activity }: Props) {
                     type="button"
                     className="w-full text-base font-medium text-white shadow"
                     onClick={handleClickEditFormOpen}
+                    variant="default"
                   >
                     수정
                   </Button>
