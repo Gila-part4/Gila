@@ -2,7 +2,8 @@
 
 import { approveActivityRequest, rejectActivityRequest } from '@/app/action/activity-request';
 import { responseMail } from '@/app/action/mail';
-import SmallButton from '@/components/small-button';
+import DeleteAlertModal from '@/components/delete-alert-modal';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import UserIcon from '@/components/user-icon';
 import { RequestWithReqUserAndActivity } from '@/type';
@@ -34,8 +35,7 @@ export default function PromisedListCard({ promisedActivity }: Props) {
     });
   };
 
-  const reject: MouseEventHandler = (e) => {
-    e.preventDefault();
+  const reject = () => {
     startTransition(async () => {
       const action = await rejectActivityRequest(id);
       if (!action.success) {
@@ -74,8 +74,18 @@ export default function PromisedListCard({ promisedActivity }: Props) {
         </div>
       </CardContent>
       <CardFooter className="flex flex-col items-end w-[60%] gap-1 p-0 pr-1">
-        <SmallButton disabled={isPending} onClick={approve} color="bg-green" name="수락" />
-        <SmallButton disabled={isPending} onClick={reject} color="bg-red" name="거절" />
+        <Button
+          disabled={isPending}
+          type="button"
+          className="w-full text-base font-medium text-white shadow"
+          onClick={approve}
+          variant="access"
+        >
+          수락
+        </Button>
+        <div className="w-full" onClick={(e) => e.preventDefault()}>
+          <DeleteAlertModal deleteAction={reject} isButton content="거절" />
+        </div>
       </CardFooter>
     </Card>
   );

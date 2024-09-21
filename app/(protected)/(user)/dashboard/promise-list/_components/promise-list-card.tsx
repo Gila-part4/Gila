@@ -8,7 +8,8 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import formatDateRange from '@/utils/formatDateRange';
 import DeleteAlertModal from '@/components/delete-alert-modal';
-import SmallButton from '@/components/small-button';
+import { Button } from '@/components/ui/button';
+import { MouseEventHandler } from 'react';
 
 export default function PromiseListCard({ promise }: { promise: RequestWithActivity }) {
   const router = useRouter();
@@ -25,7 +26,8 @@ export default function PromiseListCard({ promise }: { promise: RequestWithActiv
     router.refresh();
   };
 
-  const enterChat = () => {
+  const enterChat: MouseEventHandler = (e) => {
+    e.preventDefault();
     router.push(`/chat/${promise.activityId}`);
   };
 
@@ -46,7 +48,7 @@ export default function PromiseListCard({ promise }: { promise: RequestWithActiv
         }
         bottomContent={
           <div className="absolute bottom-2 right-2 flex gap-32">
-            <div className="w-[70px]" onClick={(e) => e.preventDefault()}>
+            <div onClick={(e) => e.preventDefault()}>
               <DeleteAlertModal deleteAction={cancelPromise} isButton content="취소" />
             </div>
           </div>
@@ -71,9 +73,14 @@ export default function PromiseListCard({ promise }: { promise: RequestWithActiv
         }
         bottomContent={
           <div className="absolute bottom-2 right-2 flex gap-32">
-            <div className="w-[70px]" onClick={(e) => e.preventDefault()}>
-              <SmallButton onClick={enterChat} color="bg-green" name="입장" />
-            </div>
+            <Button
+              type="button"
+              className="w-full text-base font-medium text-white shadow"
+              onClick={enterChat}
+              variant="access"
+            >
+              입장
+            </Button>
           </div>
         }
       />
