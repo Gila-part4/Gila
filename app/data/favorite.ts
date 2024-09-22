@@ -1,6 +1,6 @@
 'use server';
 
-import { getCurrentUserId } from '@/app/data/user';
+import { getSessionUserData } from '@/app/data/user';
 import db from '@/lib/db';
 import { FavoriteWithActivity } from '@/type';
 
@@ -11,10 +11,10 @@ const getMyFavorites = async ({
   cursor?: string;
   take?: number;
 }): Promise<{ favorites: FavoriteWithActivity[]; cursorId: string | null }> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
   try {
     const favorites = await db.favorite.findMany({
-      where: { userId },
+      where: { userId: id },
       include: {
         activity: true,
       },

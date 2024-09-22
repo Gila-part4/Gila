@@ -4,17 +4,17 @@ import { revalidatePath } from 'next/cache';
 import db from '@/lib/db';
 import { ActionType } from '@/type';
 import { ActivityRequest } from '@prisma/client';
-import { getCurrentUserId } from '@/app/data/user';
+import { getSessionUserData } from '@/app/data/user';
 
 export const createActivityRequest = async (
   activityId: string,
 ): Promise<ActionType<ActivityRequest>> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
   try {
     const existingRequest = await db.activityRequest.findUnique({
       where: {
         requestUserId_activityId: {
-          requestUserId: userId,
+          requestUserId: id,
           activityId,
         },
       },
@@ -30,18 +30,20 @@ export const createActivityRequest = async (
       },
     });
 
-    if (myActivity?.userId === userId) {
+    if (myActivity?.userId === id) {
       return { success: false, message: '본인의 활동은 신청할 수 없습니다.' };
     }
 
     const activityRequest = await db.activityRequest.create({
       data: {
-        requestUserId: userId,
+        requestUserId: id,
         activityId,
       },
     });
 
     if (!activityRequest) return { success: false, message: '요청 생성에 실패하였습니다.' };
+
+    revalidatePath('/dashboard/promise-list');
 
     return { success: true, message: '요청 생성에 성공하였습니다.' };
   } catch (error) {

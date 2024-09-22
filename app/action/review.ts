@@ -3,7 +3,7 @@
 import db from '@/lib/db';
 import { ActionType } from '@/type';
 import { Review } from '@prisma/client';
-import { getCurrentUserId } from '@/app/data/user';
+import { getSessionUserData } from '@/app/data/user';
 import { revalidatePath } from 'next/cache';
 
 const createReview = async ({
@@ -17,13 +17,13 @@ const createReview = async ({
     return { success: false, message: '점수는 100을 초과할 수 없습니다.' };
   }
 
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
 
   try {
     const existingReview = await db.review.findUnique({
       where: {
         userId_activityId: {
-          userId,
+          userId: id,
           activityId,
         },
       },
@@ -35,7 +35,7 @@ const createReview = async ({
 
     const newReview = await db.review.create({
       data: {
-        userId,
+        userId: id,
         rating,
         activityId,
       },
