@@ -1,6 +1,6 @@
 'use server';
 
-import { getCurrentUserId } from '@/app/data/user';
+import { getSessionUserData } from '@/app/data/user';
 import db from '@/lib/db';
 import { ActivityWithUserAndRequest, ActivityWithUserandReqUser } from '@/type';
 
@@ -11,12 +11,12 @@ export const getMyChat = async ({
   cursor?: string;
   take?: number;
 }): Promise<{ activities: ActivityWithUserAndRequest[]; cursorId: string | null }> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
   const nowDate = new Date();
 
   try {
     const myChat = await db.activity.findMany({
-      where: { userId, endDate: { gte: nowDate } },
+      where: { userId: id, endDate: { gte: nowDate } },
       include: {
         user: {
           select: {

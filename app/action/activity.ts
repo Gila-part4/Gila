@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import db from '@/lib/db';
 import { ActionType } from '@/type';
 import { Activity } from '@prisma/client';
-import { getCurrentUserId } from '@/app/data/user';
+import { getSessionUserData } from '@/app/data/user';
 
 export const createActivity = async ({
   title,
@@ -26,11 +26,11 @@ export const createActivity = async ({
   maximumCount: number;
 }): Promise<ActionType<Activity>> => {
   try {
-    const userId = await getCurrentUserId();
+    const { id } = await getSessionUserData();
 
     const newActivity = await db.activity.create({
       data: {
-        userId,
+        userId: id,
         title,
         description,
         startDate,
@@ -75,12 +75,12 @@ export const editActivity = async ({
   location: string;
   maximumCount: number;
 }): Promise<ActionType<Activity>> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
   try {
     const updatedActivity = await db.activity.update({
       where: { id: activityId },
       data: {
-        userId,
+        userId: id,
         title,
         description,
         startDate,

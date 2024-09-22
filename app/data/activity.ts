@@ -1,6 +1,6 @@
 'use server';
 
-import { getCurrentUser, getCurrentUserId } from '@/app/data/user';
+import { getCurrentUser, getSessionUserData } from '@/app/data/user';
 import db from '@/lib/db';
 import {
   ActivityWithUser,
@@ -17,18 +17,18 @@ export const getMyActivities = async ({
   cursor?: string;
   take?: number;
 }): Promise<{ activities: ActivityWithFavoriteAndCount[]; cursorId: string | null }> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
 
   try {
     const myActivities = await db.activity.findMany({
-      where: { userId },
+      where: { userId: id },
       include: {
         _count: {
           select: { favorites: true },
         },
         favorites: {
           where: {
-            userId,
+            id,
           },
           select: {
             id: true,
@@ -179,11 +179,11 @@ export const getActivities = async ({
   }
 };
 
-export const getActivityById = async (id: string): Promise<ActivityWithRequest> => {
-  const userId = await getCurrentUserId();
+export const getActivityById = async (activityId: string): Promise<ActivityWithRequest> => {
+  const { id } = await getSessionUserData();
   try {
     const activity = await db.activity.findUnique({
-      where: { id },
+      where: { id: activityId },
       include: {
         user: {
           select: {
@@ -197,7 +197,7 @@ export const getActivityById = async (id: string): Promise<ActivityWithRequest> 
         },
         favorites: {
           where: {
-            userId,
+            userId: id,
           },
           select: {
             id: true,
@@ -208,7 +208,7 @@ export const getActivityById = async (id: string): Promise<ActivityWithRequest> 
             favorites: true,
           },
         },
-        activityRequests: { where: { requestUserId: userId } },
+        activityRequests: { where: { requestUserId: id } },
       },
     });
 
@@ -235,7 +235,7 @@ export const getAvailableReviewActivities = async ({
   activities: ActivityWithUser[];
   cursorId: string | null;
 }> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
   try {
     const currentDate = new Date();
 
@@ -246,13 +246,13 @@ export const getAvailableReviewActivities = async ({
         },
         activityRequests: {
           some: {
-            requestUserId: userId,
+            requestUserId: id,
             status: RequestStatus.APPROVE,
           },
         },
         reviews: {
           none: {
-            userId,
+            userId: id,
           },
         },
       },

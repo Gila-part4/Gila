@@ -1,17 +1,17 @@
 'use server';
 
-import { getCurrentUserId } from '@/app/data/user';
+import { getSessionUserData } from '@/app/data/user';
 import db from '@/lib/db';
 import { ActionType } from '@/type';
 import { Favorite } from '@prisma/client';
 
 const toggleFavorite = async (activityId: string): Promise<ActionType<Favorite>> => {
-  const userId = await getCurrentUserId();
+  const { id } = await getSessionUserData();
   try {
     const existingFavorite = await db.favorite.findFirst({
       where: {
         activityId,
-        userId,
+        userId: id,
       },
     });
 
@@ -27,7 +27,7 @@ const toggleFavorite = async (activityId: string): Promise<ActionType<Favorite>>
 
     const newFavorite = await db.favorite.create({
       data: {
-        userId,
+        userId: id,
         activityId,
       },
     });

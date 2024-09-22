@@ -82,7 +82,7 @@ export default function LocationSelectDrawer({ defaultLocation, onChange }: Prop
             'h-10 text-sm text-black bg-gray-100 rounded-r-none',
           )}
         />
-        <Map className="w-10 h-10 p-1 text-white rounded-r size-5 bg-primary" />
+        <Map className="w-10 h-10 p-1 text-white rounded-r size-5 bg-primary hover:bg-primary/75 active:bg-primary/50" />
       </DrawerTrigger>
       <DrawerContent className="bg-white_light tall:left-[calc(50vw-10px)] tall:max-w-[420px]">
         <DrawerHeader>

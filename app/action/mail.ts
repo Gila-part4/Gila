@@ -4,7 +4,7 @@ import formatDateRange from '@/utils/formatDateRange';
 import nodemailer from 'nodemailer';
 import { ActivityWithUserAndFavorite, User } from '@/type';
 import { Activity } from '@prisma/client';
-import { getCurrentUser, getUserProfileWithIntroducedInfos } from '@/app/data/user';
+import { getSessionUserData, getUserProfileWithIntroducedInfos } from '@/app/data/user';
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -36,7 +36,7 @@ export const sendEmail = async (email: string) => {
 };
 
 export const requestMail = async (activity: ActivityWithUserAndFavorite) => {
-  const currentUser = await getCurrentUser();
+  const { name } = await getSessionUserData();
   const date = formatDateRange({
     startDateString: activity.startDate,
     endDateString: activity.endDate,
@@ -48,7 +48,7 @@ export const requestMail = async (activity: ActivityWithUserAndFavorite) => {
     subject: `"${activity.title}" 활동 신청 요청이 있습니다.`,
     html: `<h1>${activity.title}</h1>
     <h2>세부 일정: ${date}</h2>
-    <p>신청자: ${currentUser.nickname}</p>
+    <p>신청자: ${name}</p>
     <a href="${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/promised-list">확인하러 가기</a>
     `,
   });
@@ -60,7 +60,7 @@ export const responseMail = async (
   requsetUser: User,
   result: 'approve' | 'reject',
 ) => {
-  const currentUser = await getCurrentUser();
+  const { name } = await getSessionUserData();
   const date = formatDateRange({
     startDateString: activity.startDate,
     endDateString: activity.endDate,
@@ -71,7 +71,7 @@ export const responseMail = async (
     subject: `"${activity.title}" 활동 신청 결과입니다.`,
     html: `<h1>${activity.title}</h1>
     <h2>세부 일정 : ${date}</h2>
-    <p>길라 : ${currentUser.nickname}</p>
+    <p>길라 : ${name}</p>
     <p>결과 : ${result === 'approve' ? '수락됨' : '거절됨'}</p>
     <a href="${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/promise-list">확인하러 가기</a>
     `,
