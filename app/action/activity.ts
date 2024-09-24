@@ -5,6 +5,7 @@ import db from '@/lib/db';
 import { ActionType } from '@/type';
 import { Activity } from '@prisma/client';
 import { getSessionUserData } from '@/app/data/user';
+import { revalidatePath } from 'next/cache';
 
 export const createActivity = async ({
   title,
@@ -44,6 +45,8 @@ export const createActivity = async ({
     });
 
     if (!newActivity) return { success: false, message: '활동 생성에 실패하였습니다.' };
+
+    revalidatePath('/dashboard/my-activity', 'page');
 
     return {
       success: true,
