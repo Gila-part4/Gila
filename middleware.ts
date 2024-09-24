@@ -1,11 +1,5 @@
 /* eslint-disable consistent-return */
-import {
-  DEFAULT_LOGIN_REDIRECT,
-  apiAuthPrefix,
-  apiUploadThingPrefix,
-  authRoutes,
-  publicRoutes,
-} from '@/routes';
+import { DEFAULT_LOGIN_REDIRECT, apiAuthPrefix, apiUploadThingPrefix, authRoutes } from '@/routes';
 import { NextResponse } from 'next/server';
 import { auth } from './auth';
 
@@ -15,7 +9,6 @@ export default auth(async (req) => {
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(`/${apiAuthPrefix}`);
   const isApiUploadthingRoute = nextUrl.pathname.startsWith(`/${apiUploadThingPrefix}`);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isMainPage = nextUrl.pathname === '/';
 
@@ -38,10 +31,6 @@ export default auth(async (req) => {
       return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
     return;
-  }
-
-  if (!isLoggedIn && !isPublicRoute) {
-    return NextResponse.redirect(new URL('/sign-in', nextUrl));
   }
 
   if (isLoggedIn && isMainPage) {
