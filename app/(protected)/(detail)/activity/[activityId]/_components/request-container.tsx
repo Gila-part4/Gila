@@ -4,7 +4,7 @@ import PromiseRequestForm from './promise-request-form';
 
 export default async function RequestContainer({ activityId }: { activityId: string }) {
   const activity = await getActivityById(activityId);
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
 
-  return <PromiseRequestForm activity={activity} currentUser={id} />;
+  return <PromiseRequestForm activity={activity} currentUser={session?.id} />;
 }

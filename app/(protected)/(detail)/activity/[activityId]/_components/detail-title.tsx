@@ -11,11 +11,14 @@ import { increaseActivityCount } from '@/app/action/activity';
 import SharePopover from '@/app/(protected)/(detail)/activity/[activityId]/_components/share-popover';
 import formatDateRange from '@/utils/formatDateRange';
 import { ActivityWithUserAndFavorite } from '@/type';
+import toastLoginMessage from '@/utils/toastLoginMessage';
 
 export default function DetailTitle({
   activityDetail,
+  session,
 }: {
   activityDetail: ActivityWithUserAndFavorite;
+  session?: string;
 }) {
   const [favorite, setFavorite] = useState(activityDetail.isFavorite);
   const [viewCount, setViewCount] = useState(activityDetail.views);
@@ -65,7 +68,10 @@ export default function DetailTitle({
           ))}
         </div>
         <div className="flex items-center gap-4">
-          <div onClick={toggleActivityLike} className="cursor-pointer">
+          <div
+            onClick={session ? toggleActivityLike : toastLoginMessage}
+            className="cursor-pointer"
+          >
             {favorite ? <Heart size={20} color="#FF4242" fill="#FF4242" /> : <Heart size={20} />}
           </div>
           <SharePopover activityId={activityDetail.id} shareImage={activityDetail.thumbnails[0]} />
