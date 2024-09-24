@@ -9,12 +9,14 @@ import { getSessionUserData } from '@/app/data/user';
 export const createActivityRequest = async (
   activityId: string,
 ): Promise<ActionType<ActivityRequest>> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
+
   try {
     const existingRequest = await db.activityRequest.findUnique({
       where: {
         requestUserId_activityId: {
-          requestUserId: id,
+          requestUserId: session.id,
           activityId,
         },
       },
@@ -30,13 +32,13 @@ export const createActivityRequest = async (
       },
     });
 
-    if (myActivity?.userId === id) {
+    if (myActivity?.userId === session.id) {
       return { success: false, message: '본인의 활동은 신청할 수 없습니다.' };
     }
 
     const activityRequest = await db.activityRequest.create({
       data: {
-        requestUserId: id,
+        requestUserId: session.id,
         activityId,
       },
     });

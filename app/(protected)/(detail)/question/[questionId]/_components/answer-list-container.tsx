@@ -5,14 +5,14 @@ import AnswerList from './answer-list';
 
 export default async function AnswerListContainer({ questionId }: { questionId: string }) {
   const questionDetail = await getQuestionById({ questionId, answerTake: 10 });
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
   if (!questionDetail) return <div>없음</div>;
 
   return (
     <AnswerList
       answers={questionDetail.answers}
       totalCount={questionDetail._count.answers}
-      userId={id}
+      userId={session?.id}
       answerCursorId={questionDetail.answerCursorId}
       questionId={questionDetail.id}
     />

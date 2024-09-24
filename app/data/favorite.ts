@@ -11,10 +11,11 @@ const getMyFavorites = async ({
   cursor?: string;
   take?: number;
 }): Promise<{ favorites: FavoriteWithActivity[]; cursorId: string | null }> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
   try {
     const favorites = await db.favorite.findMany({
-      where: { userId: id },
+      where: { userId: session.id },
       include: {
         activity: true,
       },

@@ -6,7 +6,8 @@ import ProfileContainer from './_components/profile-container';
 import ProfileSkeleton from './_components/profile-skeleton';
 
 export default async function Page() {
-  const { id, name, image } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) return <div>인증이 필요합니다.</div>;
 
   return (
     <main className="p-5">
@@ -14,12 +15,12 @@ export default async function Page() {
         <Card className="shadow-md">
           <CardHeader className="flex flex-col gap-5">
             <CardTitle className="font-bold text-center">
-              <span className="text-3xl text-primary">{name}</span>님의 프로필
+              <span className="text-3xl text-primary">{session.name}</span>님의 프로필
             </CardTitle>
-            <ProfileImage image={image} />
+            <ProfileImage image={session.image} />
           </CardHeader>
           <CardContent>
-            <ProfileContainer id={id} />
+            <ProfileContainer id={session.id} />
           </CardContent>
         </Card>
       </Suspense>

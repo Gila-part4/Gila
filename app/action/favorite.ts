@@ -6,12 +6,13 @@ import { ActionType } from '@/type';
 import { Favorite } from '@prisma/client';
 
 const toggleFavorite = async (activityId: string): Promise<ActionType<Favorite>> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
   try {
     const existingFavorite = await db.favorite.findFirst({
       where: {
         activityId,
-        userId: id,
+        userId: session.id,
       },
     });
 
@@ -27,7 +28,7 @@ const toggleFavorite = async (activityId: string): Promise<ActionType<Favorite>>
 
     const newFavorite = await db.favorite.create({
       data: {
-        userId: id,
+        userId: session.id,
         activityId,
       },
     });

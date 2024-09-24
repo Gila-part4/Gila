@@ -5,6 +5,7 @@ import db from '@/lib/db';
 import { ActionType } from '@/type';
 import { Activity } from '@prisma/client';
 import { getSessionUserData } from '@/app/data/user';
+import { revalidatePath } from 'next/cache';
 
 export const createActivity = async ({
   title,
@@ -26,11 +27,12 @@ export const createActivity = async ({
   maximumCount: number;
 }): Promise<ActionType<Activity>> => {
   try {
-    const { id } = await getSessionUserData();
+    const session = await getSessionUserData();
+    if (!session) throw new Error('인증이 필요합니다.');
 
     const newActivity = await db.activity.create({
       data: {
-        userId: id,
+        userId: session.id,
         title,
         description,
         startDate,
@@ -43,6 +45,8 @@ export const createActivity = async ({
     });
 
     if (!newActivity) return { success: false, message: '활동 생성에 실패하였습니다.' };
+
+    revalidatePath('/dashboard/my-activity', 'page');
 
     return {
       success: true,
@@ -75,12 +79,14 @@ export const editActivity = async ({
   location: string;
   maximumCount: number;
 }): Promise<ActionType<Activity>> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
+
   try {
     const updatedActivity = await db.activity.update({
       where: { id: activityId },
       data: {
-        userId: id,
+        userId: session.id,
         title,
         description,
         startDate,

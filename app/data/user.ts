@@ -6,7 +6,7 @@ import { User } from '@/type';
 export const getSessionUserData = async () => {
   const session = await auth();
   try {
-    if (!session) throw new Error('현재 로그인되어있지 않습니다.');
+    if (!session) return null;
     if (!session.user) throw new Error('유저 데이터가 없습니다.');
     const { email, name, id, image } = session.user;
     if (!email) throw new Error('존재하지 않는 이메일 입니다.');
@@ -20,12 +20,13 @@ export const getSessionUserData = async () => {
   }
 };
 
-export const getCurrentUser = async (): Promise<User> => {
-  const { email } = await getSessionUserData();
+export const getCurrentUser = async (): Promise<User | null> => {
+  const session = await getSessionUserData();
   try {
+    if (!session) return null;
     const user = await db.user.findUnique({
       where: {
-        email,
+        email: session.email,
       },
       select: {
         id: true,
@@ -36,9 +37,7 @@ export const getCurrentUser = async (): Promise<User> => {
         createdAt: true,
       },
     });
-
     if (!user) throw new Error('유저 정보가 존재하지 않습니다.');
-
     return user;
   } catch (error) {
     throw new Error('유저 정보를 가져오는중에 에러가 발생하였습니다.');
@@ -98,11 +97,12 @@ export const getUserProfileWithIntroducedInfos = async (
   }
 };
 
-export const getIsFirstLogin = async (): Promise<boolean> => {
-  const { id } = await getSessionUserData();
+export const getIsFirstLogin = async (): Promise<boolean | null> => {
+  const session = await getSessionUserData();
   try {
+    if (!session) return null;
     const user = await db.user.findUnique({
-      where: { id },
+      where: { id: session.id },
     });
     if (!user) throw new Error('해당 유저 정보가 존재하지 않습니다.');
 
