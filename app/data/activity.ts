@@ -17,18 +17,18 @@ export const getMyActivities = async ({
   cursor?: string;
   take?: number;
 }): Promise<{ activities: ActivityWithFavoriteAndCount[]; cursorId: string | null }> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
 
   try {
     const myActivities = await db.activity.findMany({
-      where: { userId: id },
+      where: { userId: session?.id },
       include: {
         _count: {
           select: { favorites: true },
         },
         favorites: {
           where: {
-            id,
+            id: session?.id,
           },
           select: {
             id: true,
@@ -126,27 +126,34 @@ export const getActivities = async ({
 
       case 'tag':
         if (!currentUser || !currentUser.tags) {
-          throw new Error('현재 유저가 존재하지 않습니다.');
+          activities = await db.activity.findMany({
+            ...baseQuery,
+            where: location ? { location } : {},
+            orderBy: {
+              createdAt: 'desc',
+            },
+          });
+        } else {
+          activities = await db.activity.findMany({
+            ...baseQuery,
+            where: location
+              ? {
+                  location,
+                  tags: {
+                    hasSome: currentUser.tags,
+                  },
+                }
+              : {
+                  tags: {
+                    hasSome: currentUser.tags,
+                  },
+                },
+            orderBy: {
+              createdAt: 'desc',
+            },
+          });
         }
 
-        activities = await db.activity.findMany({
-          ...baseQuery,
-          where: location
-            ? {
-                location,
-                tags: {
-                  hasSome: currentUser.tags,
-                },
-              }
-            : {
-                tags: {
-                  hasSome: currentUser.tags,
-                },
-              },
-          orderBy: {
-            createdAt: 'desc',
-          },
-        });
         break;
 
       case 'mostViewed':
@@ -180,7 +187,7 @@ export const getActivities = async ({
 };
 
 export const getActivityById = async (activityId: string): Promise<ActivityWithRequest> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
   try {
     const activity = await db.activity.findUnique({
       where: { id: activityId },
@@ -197,7 +204,7 @@ export const getActivityById = async (activityId: string): Promise<ActivityWithR
         },
         favorites: {
           where: {
-            userId: id,
+            userId: session?.id,
           },
           select: {
             id: true,
@@ -208,7 +215,7 @@ export const getActivityById = async (activityId: string): Promise<ActivityWithR
             favorites: true,
           },
         },
-        activityRequests: { where: { requestUserId: id } },
+        activityRequests: { where: { requestUserId: session?.id } },
       },
     });
 
@@ -235,7 +242,7 @@ export const getAvailableReviewActivities = async ({
   activities: ActivityWithUser[];
   cursorId: string | null;
 }> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
   try {
     const currentDate = new Date();
 
@@ -246,13 +253,13 @@ export const getAvailableReviewActivities = async ({
         },
         activityRequests: {
           some: {
-            requestUserId: id,
+            requestUserId: session?.id,
             status: RequestStatus.APPROVE,
           },
         },
         reviews: {
           none: {
-            userId: id,
+            userId: session?.id,
           },
         },
       },
