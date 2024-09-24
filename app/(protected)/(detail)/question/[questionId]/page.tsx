@@ -7,6 +7,8 @@ import AnswerForm from './_components/answer-form';
 import QuestionDetailSkeleton from './_components/question-detail-skeleton';
 import AnswerListContainer from './_components/answer-list-container';
 import AnswerListSkeleton from './_components/answer-list-skeleton';
+import { getSessionUserData } from '@/app/data/user';
+import LoginLinkArea from '@/components/loginLink-area';
 
 interface Params {
   questionId: string;
@@ -14,6 +16,7 @@ interface Params {
 
 export default async function Page({ params }: { params: Params }) {
   const questionDetail = await getQuestionById({ questionId: params.questionId, answerTake: 10 });
+  const session = await getSessionUserData();
   if (!questionDetail) return <div>없음</div>;
   return (
     <div className="p-4 flex flex-col gap-4">
@@ -24,7 +27,10 @@ export default async function Page({ params }: { params: Params }) {
         <AnswerListContainer questionId={params.questionId} />
       </Suspense>
       <Separator className="bg-gray_300" />
-      <AnswerForm />
+      <div className="relative">
+        {!session && <LoginLinkArea />}
+        <AnswerForm />
+      </div>
     </div>
   );
 }
