@@ -8,7 +8,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import Image from 'next/image';
-import { LogOut, Menu } from 'lucide-react';
+import { LogIn, LogOut, Menu } from 'lucide-react';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/app/action/user';
@@ -18,9 +18,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface Props {
   userAvatar: string | null | undefined;
+  user?: string;
 }
 
-export default function NavSideMenu({ userAvatar }: Props) {
+export default function NavSideMenu({ userAvatar, user }: Props) {
   const [isPending, startTrasition] = useTransition();
   const router = useRouter();
 
@@ -74,12 +75,21 @@ export default function NavSideMenu({ userAvatar }: Props) {
           <SideMenuAccordion />
           <button
             disabled={isPending}
-            onClick={Logout}
+            onClick={() => (user ? Logout() : router.push('/sign-in'))}
             type="button"
             className="flex items-center text-black transition-all h-10 rounded-lg w-fit hover:text-primary gap-2"
           >
-            <LogOut width={20} height={20} />
-            <p className="font-semibold text-sm">로그아웃</p>
+            {user ? (
+              <>
+                <LogOut width={20} height={20} />
+                <p className="font-semibold text-sm">로그아웃</p>
+              </>
+            ) : (
+              <>
+                <LogIn width={20} height={20} />
+                <p className="font-semibold text-sm">로그인</p>
+              </>
+            )}
           </button>
         </div>
       </SheetContent>

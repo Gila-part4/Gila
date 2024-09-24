@@ -25,7 +25,7 @@ export default async function NavigationBase({ children }: { children?: ReactNod
       </div>
       {children && <div className="col-span-2">{children}</div>}
       <div className="flex items-center justify-end w-[70px]">
-        <NavSideMenu userAvatar={session?.image} />
+        <NavSideMenu userAvatar={session?.image} user={session?.id} />
       </div>
     </nav>
   );
