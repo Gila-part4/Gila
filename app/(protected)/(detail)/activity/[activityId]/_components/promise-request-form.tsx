@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import REQUEST_STATUS from '@/constants/request';
 import { ActivityWithRequest } from '@/type';
 import formatDateRange from '@/utils/formatDateRange';
+import toastLoginMessage from '@/utils/toastLoginMessage';
 import { useEffect, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
@@ -14,7 +15,7 @@ export default function PromiseRequestForm({
   currentUser,
 }: {
   activity: ActivityWithRequest;
-  currentUser: string;
+  currentUser?: string;
 }) {
   const { startDate, endDate, id, maximumCount, activityRequests } = activity;
   const [isPending, startTransition] = useTransition();
@@ -55,10 +56,10 @@ export default function PromiseRequestForm({
             <Button
               type="button"
               className="px-4 py-2 text-sm font-semibold text-white border border-none rounded-md bg-primary hover:bg-primary_dark"
-              onClick={applyActivity}
+              onClick={currentUser ? applyActivity : toastLoginMessage}
               disabled={isPending || isDisabled}
             >
-              {buttonStatus}
+              {currentUser ? buttonStatus : '로그인후 신청 가능'}
             </Button>
           )}
         </>

@@ -36,23 +36,30 @@ export const sendEmail = async (email: string) => {
 };
 
 export const requestMail = async (activity: ActivityWithUserAndFavorite) => {
-  const { name } = await getSessionUserData();
-  const date = formatDateRange({
-    startDateString: activity.startDate,
-    endDateString: activity.endDate,
-  });
-  const owner = await getUserProfileWithIntroducedInfos(activity.userId);
-  await transporter.sendMail({
-    from: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
-    to: owner.user.email,
-    subject: `"${activity.title}" 활동 신청 요청이 있습니다.`,
-    html: `<h1>${activity.title}</h1>
-    <h2>세부 일정: ${date}</h2>
-    <p>신청자: ${name}</p>
-    <a href="${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/promised-list">확인하러 가기</a>
-    `,
-  });
-  return { message: '길라에게 메일을 전송했습니다.' };
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
+  try {
+    const date = formatDateRange({
+      startDateString: activity.startDate,
+      endDateString: activity.endDate,
+    });
+    const owner = await getUserProfileWithIntroducedInfos(activity.userId);
+    await transporter.sendMail({
+      from: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
+      to: owner.user.email,
+      subject: `"${activity.title}" 활동 신청 요청이 있습니다.`,
+      html: `<h1>${activity.title}</h1>
+      <h2>세부 일정: ${date}</h2>
+      <p>신청자: ${session.name}</p>
+      <a href="${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/promised-list">확인하러 가기</a>
+      `,
+    });
+    return { message: '길라에게 메일을 전송했습니다.' };
+  } catch (error) {
+    return {
+      message: '메일 전송중 에러가 발생하였습니다.',
+    };
+  }
 };
 
 export const responseMail = async (
@@ -60,21 +67,28 @@ export const responseMail = async (
   requsetUser: User,
   result: 'approve' | 'reject',
 ) => {
-  const { name } = await getSessionUserData();
-  const date = formatDateRange({
-    startDateString: activity.startDate,
-    endDateString: activity.endDate,
-  });
-  await transporter.sendMail({
-    from: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
-    to: requsetUser.email,
-    subject: `"${activity.title}" 활동 신청 결과입니다.`,
-    html: `<h1>${activity.title}</h1>
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
+  try {
+    const date = formatDateRange({
+      startDateString: activity.startDate,
+      endDateString: activity.endDate,
+    });
+    await transporter.sendMail({
+      from: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
+      to: requsetUser.email,
+      subject: `"${activity.title}" 활동 신청 결과입니다.`,
+      html: `<h1>${activity.title}</h1>
     <h2>세부 일정 : ${date}</h2>
-    <p>길라 : ${name}</p>
+    <p>길라 : ${session.name}</p>
     <p>결과 : ${result === 'approve' ? '수락됨' : '거절됨'}</p>
     <a href="${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/promise-list">확인하러 가기</a>
     `,
-  });
-  return { message: '길라에게 메일을 전송했습니다.' };
+    });
+    return { message: '길라에게 메일을 전송했습니다.' };
+  } catch (error) {
+    return {
+      message: '메일 전송중 에러가 발생하였습니다.',
+    };
+  }
 };
