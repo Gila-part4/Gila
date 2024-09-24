@@ -15,11 +15,13 @@ export const createQuestion = async ({
   content: string;
   location: string;
 }): Promise<ActionType<Question>> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
+
   try {
     const question = await db.question.create({
       data: {
-        userId: id,
+        userId: session.id,
         title,
         content,
         location,

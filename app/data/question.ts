@@ -93,11 +93,12 @@ export const getMyQuestions = async ({
   answerTake?: number;
   cursor?: string;
 }): Promise<{ questions: QuestionWithUserAndAnswers[]; cursorId: string | null }> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
 
   const questions = await db.question.findMany({
     where: {
-      userId: id,
+      userId: session.id,
     },
     include: {
       answers: {

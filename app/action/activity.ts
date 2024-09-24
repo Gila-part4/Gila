@@ -26,11 +26,12 @@ export const createActivity = async ({
   maximumCount: number;
 }): Promise<ActionType<Activity>> => {
   try {
-    const { id } = await getSessionUserData();
+    const session = await getSessionUserData();
+    if (!session) throw new Error('인증이 필요합니다.');
 
     const newActivity = await db.activity.create({
       data: {
-        userId: id,
+        userId: session.id,
         title,
         description,
         startDate,
@@ -75,12 +76,14 @@ export const editActivity = async ({
   location: string;
   maximumCount: number;
 }): Promise<ActionType<Activity>> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
+
   try {
     const updatedActivity = await db.activity.update({
       where: { id: activityId },
       data: {
-        userId: id,
+        userId: session.id,
         title,
         description,
         startDate,

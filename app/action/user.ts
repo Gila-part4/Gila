@@ -126,12 +126,13 @@ export const logout = async (): Promise<ActionType<null>> => {
 };
 
 export const editNickname = async (newNickname: string): Promise<ActionType<User>> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
   try {
     const checkNickName = await findUserByNickname(newNickname);
     if (checkNickName) return { success: false, message: '이미 사용중인 닉네임입니다.' };
     const updatedUser = await db.user.update({
-      where: { id },
+      where: { id: session.id },
       data: { nickname: newNickname },
     });
 
@@ -151,10 +152,12 @@ export const editNickname = async (newNickname: string): Promise<ActionType<User
 };
 
 export const editPassword = async (newPassword: string): Promise<ActionType<User>> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
+
   try {
     const updatedUser = await db.user.update({
-      where: { id },
+      where: { id: session.id },
       data: { password: newPassword },
     });
 
@@ -174,11 +177,12 @@ export const editPassword = async (newPassword: string): Promise<ActionType<User
 };
 
 export const editTags = async (tags: string[]): Promise<ActionType<User>> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
 
   try {
     const updatedUser = await db.user.update({
-      where: { id },
+      where: { id: session.id },
       data: { tags },
     });
 
@@ -195,11 +199,12 @@ export const editTags = async (tags: string[]): Promise<ActionType<User>> => {
 };
 
 export const editImage = async (url: string): Promise<ActionType<User>> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
 
   try {
     const updatedUser = await db.user.update({
-      where: { id },
+      where: { id: session.id },
       data: { image: url },
     });
 
@@ -219,11 +224,12 @@ export const editImage = async (url: string): Promise<ActionType<User>> => {
 };
 
 export const setFirstLoginToFalse = async (): Promise<ActionType<null>> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
 
   try {
     const user = await db.user.update({
-      where: { id },
+      where: { id: session.id },
       data: {
         isFirstLogin: false,
       },

@@ -15,11 +15,12 @@ export const createAnswer = async ({
   content: string;
   images?: string[];
 }): Promise<ActionType<Answer>> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
   try {
     const newAnswer = await db.answer.create({
       data: {
-        userId: id,
+        userId: session.id,
         questionId,
         content,
         images,

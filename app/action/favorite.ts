@@ -7,8 +7,8 @@ import { Favorite } from '@prisma/client';
 
 const toggleFavorite = async (activityId: string): Promise<ActionType<Favorite>> => {
   const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
   try {
-    if (!session) throw new Error('인증되지 않은 유저입니다.');
     const existingFavorite = await db.favorite.findFirst({
       where: {
         activityId,

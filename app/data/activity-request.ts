@@ -12,11 +12,12 @@ export const getMySentRequests = async ({
   cursor?: string;
   take?: number;
 }): Promise<{ validRequests: RequestWithActivity[]; cursorId: string | null }> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
   const nowDate = new Date();
   try {
     const requests = await db.activityRequest.findMany({
-      where: { requestUserId: id },
+      where: { requestUserId: session.id },
       include: {
         activity: true,
       },
@@ -56,11 +57,13 @@ export const getMyReceivedRequests = async ({
   take?: number;
 }): Promise<{ requests: RequestWithReqUserAndActivity[]; cursorId: string | null }> => {
   try {
-    const { id } = await getSessionUserData();
+    const session = await getSessionUserData();
+    if (!session) throw new Error('인증이 필요합니다.');
+
     const nowDate = new Date();
 
     const userActivities = await db.activity.findMany({
-      where: { userId: id, endDate: { gte: nowDate } },
+      where: { userId: session.id, endDate: { gte: nowDate } },
       select: {
         activityRequests: {
           where: {

@@ -17,13 +17,14 @@ const createReview = async ({
     return { success: false, message: '점수는 100을 초과할 수 없습니다.' };
   }
 
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
 
   try {
     const existingReview = await db.review.findUnique({
       where: {
         userId_activityId: {
-          userId: id,
+          userId: session.id,
           activityId,
         },
       },
@@ -35,7 +36,7 @@ const createReview = async ({
 
     const newReview = await db.review.create({
       data: {
-        userId: id,
+        userId: session.id,
         rating,
         activityId,
       },

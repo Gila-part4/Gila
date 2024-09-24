@@ -11,12 +11,13 @@ export const getMyChat = async ({
   cursor?: string;
   take?: number;
 }): Promise<{ activities: ActivityWithUserAndRequest[]; cursorId: string | null }> => {
-  const { id } = await getSessionUserData();
+  const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
   const nowDate = new Date();
 
   try {
     const myChat = await db.activity.findMany({
-      where: { userId: id, endDate: { gte: nowDate } },
+      where: { userId: session.id, endDate: { gte: nowDate } },
       include: {
         user: {
           select: {

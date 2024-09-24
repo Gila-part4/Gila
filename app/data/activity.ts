@@ -18,17 +18,18 @@ export const getMyActivities = async ({
   take?: number;
 }): Promise<{ activities: ActivityWithFavoriteAndCount[]; cursorId: string | null }> => {
   const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
 
   try {
     const myActivities = await db.activity.findMany({
-      where: { userId: session?.id },
+      where: { userId: session.id },
       include: {
         _count: {
           select: { favorites: true },
         },
         favorites: {
           where: {
-            id: session?.id,
+            id: session.id,
           },
           select: {
             id: true,
@@ -243,6 +244,7 @@ export const getAvailableReviewActivities = async ({
   cursorId: string | null;
 }> => {
   const session = await getSessionUserData();
+  if (!session) throw new Error('인증이 필요합니다.');
   try {
     const currentDate = new Date();
 
@@ -253,13 +255,13 @@ export const getAvailableReviewActivities = async ({
         },
         activityRequests: {
           some: {
-            requestUserId: session?.id,
+            requestUserId: session.id,
             status: RequestStatus.APPROVE,
           },
         },
         reviews: {
           none: {
-            userId: session?.id,
+            userId: session.id,
           },
         },
       },
