@@ -225,7 +225,7 @@ export const getActivityById = async (activityId: string): Promise<ActivityWithR
 
     return {
       ...activity,
-      isFavorite: activity.favorites.length > 0,
+      isFavorite: session ? activity.favorites.length > 0 : false,
     };
   } catch (error) {
     throw new Error('활동을 가져오는 중에 에러가 발생하였습니다.');
