@@ -1,10 +1,10 @@
 import QuestionForm from '@/app/(protected)/(main)/question-list/_components/question-form';
 import { QuestionSort } from '@/type';
 import { Suspense } from 'react';
-import QuestionContainer from './_components/question-container';
-import QuestionListSkeleton from './_components/question-list-skeleton';
 import { getSessionUserData } from '@/app/data/user';
 import LoginLinkArea from '@/components/loginLink-area';
+import QuestionContainer from './_components/question-container';
+import QuestionListSkeleton from './_components/question-list-skeleton';
 
 export default async function Page({
   searchParams,

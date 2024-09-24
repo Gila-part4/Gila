@@ -6,6 +6,7 @@ export default async function Page({ params }: { params: { channel: string } }) 
   const user = await getCurrentUser();
   const activity = await getChannelById(params.channel);
 
+  if (!user) return <div>인증이 필요합니다.</div>;
   return (
     <ChatPage
       channel={params.channel}

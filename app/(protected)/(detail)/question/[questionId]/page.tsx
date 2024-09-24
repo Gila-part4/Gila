@@ -2,13 +2,13 @@
 import { getQuestionById } from '@/app/data/question';
 import { Separator } from '@/components/ui/separator';
 import { Suspense } from 'react';
+import { getSessionUserData } from '@/app/data/user';
+import LoginLinkArea from '@/components/loginLink-area';
 import QuestionDetail from './_components/question-detail';
 import AnswerForm from './_components/answer-form';
 import QuestionDetailSkeleton from './_components/question-detail-skeleton';
 import AnswerListContainer from './_components/answer-list-container';
 import AnswerListSkeleton from './_components/answer-list-skeleton';
-import { getSessionUserData } from '@/app/data/user';
-import LoginLinkArea from '@/components/loginLink-area';
 
 interface Params {
   questionId: string;
