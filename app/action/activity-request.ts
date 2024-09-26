@@ -45,7 +45,7 @@ export const createActivityRequest = async (
 
     if (!activityRequest) return { success: false, message: '요청 생성에 실패하였습니다.' };
 
-    revalidatePath('/dashboard/promise-list');
+    revalidatePath('/dashboard/promise-list', 'page');
 
     return { success: true, message: '요청 생성에 성공하였습니다.' };
   } catch (error) {
