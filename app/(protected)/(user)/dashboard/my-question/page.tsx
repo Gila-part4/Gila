@@ -11,7 +11,7 @@ export default async function Page() {
     <div className="p-5">
       <div className="flex justify-between w-full mb-5">
         <h1 className="text-2xl font-bold">
-          <span className="text-3xl text-primary">{session?.name}</span>님의 질문
+          <span className="text-3xl text-primary">{session?.nickname}</span>님의 질문
         </h1>
         <MyQuestionCreateModal />
       </div>
