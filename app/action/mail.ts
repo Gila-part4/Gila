@@ -50,7 +50,7 @@ export const requestMail = async (activity: ActivityWithUserAndFavorite) => {
       subject: `"${activity.title}" 활동 신청 요청이 있습니다.`,
       html: `<h1>${activity.title}</h1>
       <h2>세부 일정: ${date}</h2>
-      <p>신청자: ${session.name}</p>
+      <p>신청자: ${session.nickname}</p>
       <a href="${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/promised-list">확인하러 가기</a>
       `,
     });
@@ -80,7 +80,7 @@ export const responseMail = async (
       subject: `"${activity.title}" 활동 신청 결과입니다.`,
       html: `<h1>${activity.title}</h1>
     <h2>세부 일정 : ${date}</h2>
-    <p>길라 : ${session.name}</p>
+    <p>길라 : ${session.nickname}</p>
     <p>결과 : ${result === 'approve' ? '수락됨' : '거절됨'}</p>
     <a href="${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/promise-list">확인하러 가기</a>
     `,

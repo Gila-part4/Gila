@@ -9,7 +9,7 @@ export default async function Page() {
   return (
     <main className="p-5 flex flex-col gap-4">
       <h1 className="text-2xl font-bold">
-        <span className="text-3xl text-primary">{session?.name}</span>님이 저장한 활동
+        <span className="text-3xl text-primary">{session?.nickname}</span>님이 저장한 활동
       </h1>
       <Suspense fallback={<WishListSkeleton />}>
         <WishListContainer />
