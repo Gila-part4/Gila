@@ -11,7 +11,7 @@ export default async function Page() {
       <div className="flex items-center justify-between w-full pb-5">
         <div>
           <h1 className="text-2xl font-bold">
-            <span className="text-3xl text-primary">{session?.name}</span>님이 등록한 채팅
+            <span className="text-3xl text-primary">{session?.nickname}</span>님이 등록한 채팅
           </h1>
           <p className="text-base font-medium">등록한 활동의 참가자들과 소통해보세요!</p>
         </div>

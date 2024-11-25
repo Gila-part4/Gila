@@ -247,3 +247,7 @@ export const setFirstLoginToFalse = async (): Promise<ActionType<null>> => {
     };
   }
 };
+
+export const loginByOAuth = async (platform: string) => {
+  await signIn(platform);
+};
